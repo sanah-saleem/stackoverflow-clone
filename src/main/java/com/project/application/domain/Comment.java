@@ -36,9 +36,9 @@ public class Comment {
     @Column(name="created_at")
     private Timestamp createdAt;
 
-    @ManyToOne(cascade = {
-            CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "answer_id")
-    private Answer answer;
+//    @ManyToOne(cascade = {
+//            CascadeType.DETACH, CascadeType.MERGE,
+//            CascadeType.PERSIST, CascadeType.REFRESH})
+//    @JoinColumn(name = "answer_id")
+//    private Answer answer;
 }
