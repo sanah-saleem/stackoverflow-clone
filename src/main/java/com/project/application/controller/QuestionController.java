@@ -1,6 +1,8 @@
 package com.project.application.controller;
 
+import com.project.application.domain.Answer;
 import com.project.application.domain.Question;
+import com.project.application.service.AnswerService;
 import com.project.application.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,9 @@ public class QuestionController {
 
     @Autowired
     QuestionService questionService;
+
+    @Autowired
+    AnswerService answerService;
 
     @GetMapping(value={"/","/dashboard"})
     public String home(Model theModel){
@@ -41,7 +46,32 @@ public class QuestionController {
 
         Question question = questionService.getQuestionById(questionId);
         theModel.addAttribute("question", question);
+
+        List<Answer> answers = answerService.getAllAnswers();
+        theModel.addAttribute("answers", answers);
+
         return "display-question";
+    }
+
+    @PostMapping("/#")
+    public String saveAnswer(@ModelAttribute("answer") Answer answer, long answerId){
+
+        answerService.saveAnswer(answer, answerId);
+        return "";
+    }
+
+    @PutMapping("/#")
+    public String updateAnswer(Model theModel, @RequestParam("answerId") long answerId){
+
+        theModel.addAttribute("answer", answerService.getByAnswerId(answerId));
+        return "";
+    }
+
+    @DeleteMapping("/#")
+    public String deleteAnswer(@RequestParam("answerId") long answerId){
+
+        answerService.deleteAnswerById(answerId);
+        return "";
     }
 
 }
