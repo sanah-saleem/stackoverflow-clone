@@ -9,7 +9,7 @@ public interface AnswerService {
 
     void updateAnswer(Answer answer,long answerId);
 
-    Answer getByAnswerId(long answerId);
+    Answer getAnswerById(long answerId);
 
     List<Answer> getAllAnswers();
 

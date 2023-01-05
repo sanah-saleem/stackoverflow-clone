@@ -14,12 +14,12 @@ public class AnswerServiceImpl implements AnswerService{
     private AnswerRepository answerRepository;
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionService questionService;
 
 
     @Override
     public void saveAnswer(Answer answer, long questionId) {
-        Question question=questionRepository.findById(questionId).get();
+        Question question=questionService.getQuestionById(questionId);
         answerRepository.save(answer);
         question.addAnswer(answer);
     }
@@ -31,7 +31,7 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public Answer getByAnswerId(long answerId) {
+    public Answer getAnswerById(long answerId) {
         Answer answer=answerRepository.findById(answerId).get();
         return answer;
     }
