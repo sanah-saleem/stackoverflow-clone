@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+        background-color:#FAF8F1;
+        padding:3% 0 3% 5%;
+        }
+        .input{
+        width:40%;
+        padding:0.5% 0 0 0;
+        font-size:100%;
+        }
+        textarea{
+        font-weight:heavy;
+        }
+        button{
+        padding:.5% .5% 0.5% 0.5%;
+        }
+    </style>
+</head>
+<body>
+<h2>Ask a public Question</h2>
+
+<br><br>
+<h3>Title</h3>
+<form th:action="@{/post-question}" th:object="${question}" method="post">
+    <input class="input"  type="text" th:field="*{title}" placeholder="Enter the title for your question">
+    <br><br>
+    <h4>What are the details of your problem?</h4>
+    <textarea th:field="*{problem}" rows="20" cols="100"></textarea>
+    <br><br>
+    <h4>What did you try and what were you expecting?</h4>
+    <textarea th:field="*{expectation}" rows="20" cols="100"></textarea>
+    <br><br>
+    <h4>Tags</h4>
+    <input class="input" type="text" name="tags">
+    <br><br>
+    <button type="submit">Post</button>
+</form>
+</body>
+</html>
