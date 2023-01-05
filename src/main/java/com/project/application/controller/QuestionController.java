@@ -68,7 +68,7 @@ public class QuestionController {
     @PutMapping("/#")
     public String updateAnswer(Model theModel, @RequestParam("answerId") long answerId){
 
-        theModel.addAttribute("answer", answerService.getByAnswerId(answerId));
+        theModel.addAttribute("answer", answerService.getAnswerById(answerId));
         return "";
     }
 
@@ -89,7 +89,7 @@ public class QuestionController {
     @PutMapping("/#")
     public String updateComment(Model theModel, @RequestParam("commentId") long commentId){
 
-        theModel.addAttribute("answer", commentService.getByCommentById(commentId));
+        theModel.addAttribute("answer", commentService.getCommentById(commentId));
         return "";
     }
 
