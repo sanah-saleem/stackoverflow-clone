@@ -1,13 +1,13 @@
-package com.project.service;
+package com.project.application.service;
 
-import com.project.domain.Question;
+import com.project.application.domain.Question;
 
 import java.util.List;
 
 public interface QuestionService {
     List<Question> getAllQuestons();
 
-    void saveQuestion(Question question);
+    void saveQuestion(Question question, String tagName);
 
     Question getQuestionById(long questionId);
 

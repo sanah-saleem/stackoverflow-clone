@@ -1,7 +1,7 @@
-package com.project.controller;
+package com.project.application.controller;
 
-import com.project.domain.Question;
-import com.project.service.QuestionService;
+import com.project.application.domain.Question;
+import com.project.application.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,19 +18,24 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
-    @GetMapping("/")
+    @GetMapping(value={"/","/dashboard"})
     public String home(Model theModel){
 
         List<Question> questions = questionService.getAllQuestons();
         theModel.addAttribute("questions", questions);
-        return "home";
+        return "dashboard";
+    }
+
+    @GetMapping("/ask-question")
+    public String askQuestion(Model model) {
+        model.addAttribute(new Question());
+        return "input-question";
     }
 
     @PostMapping("/post-question")
-    public String saveQuestion(@ModelAttribute("question") Question question){
+    public String saveQuestion(@ModelAttribute("question") Question question, @RequestParam("tag") String tags){
 
-        questionService.saveQuestion(question);
-
+        questionService.saveQuestion(question, tags);
         return "redirect:/";
     }
 

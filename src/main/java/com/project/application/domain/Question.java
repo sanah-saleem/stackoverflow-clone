@@ -1,4 +1,4 @@
-package com.project.domain;
+package com.project.application.domain;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -6,17 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,15 +18,20 @@ import lombok.Setter;
 @Entity
 @Table(name="question")
 public class Question {
-	
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY )
 	@Column(name="id")
 	private long id;
 	
 	@Column(name="title")
 	private String title;
 	
-	@Column(name="body")
-	private String body;
+	@Column(name="problem")
+	private String problem;
+
+	@Column(name="expectation")
+	private String expectation;
 	
 	@CreationTimestamp
 	@Column(name="created_at")
@@ -53,7 +51,7 @@ public class Question {
         name = "question_tag",
         joinColumns = @JoinColumn(name = "question_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags;
+    private List<Tag> tags;
 	
 	public void addAnswer(Answer answer) {
         if (answers == null) {
@@ -70,7 +68,7 @@ public class Question {
 	
 	public void addTag(Tag tag) {
 		if(tags == null) {
-			tags = new HashSet<>();
+			tags = new ArrayList<>();
 		}
 		tags.add(tag);
 	}
