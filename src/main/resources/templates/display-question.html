@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Question</title>
+    <style>
+        body{
+      background-color:#FAF8F1;
+      }
+    </style>
+</head>
+<body>
+<h3 th:text=${question.title}></h3>
+<p th:text=${question.problem}></p>
+<p th:text="${question.expectation}"></p>
+</body>
+</html>
