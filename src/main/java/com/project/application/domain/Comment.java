@@ -26,6 +26,9 @@ public class Comment {
     @Column(name="name")
     private String name;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name="content")
     private String content;
 

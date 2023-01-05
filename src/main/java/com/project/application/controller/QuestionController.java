@@ -1,9 +1,11 @@
 package com.project.application.controller;
 
 import com.project.application.domain.Answer;
+import com.project.application.domain.Comment;
 import com.project.application.domain.Question;
 import com.project.application.service.AnswerService;
 import com.project.application.service.QuestionService;
+import com.project.application.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,9 @@ public class QuestionController {
 
     @Autowired
     AnswerService answerService;
+
+    @Autowired
+    CommentService commentService;
 
     @GetMapping(value={"/","/dashboard"})
     public String home(Model theModel){
@@ -47,16 +52,16 @@ public class QuestionController {
         Question question = questionService.getQuestionById(questionId);
         theModel.addAttribute("question", question);
 
-        List<Answer> answers = answerService.getAllAnswers();
-        theModel.addAttribute("answers", answers);
+//        List<Answer> answers = answerService.getAllAnswers();
+//        theModel.addAttribute("answers", question.getAnswers());
 
         return "display-question";
     }
 
     @PostMapping("/#")
-    public String saveAnswer(@ModelAttribute("answer") Answer answer, long answerId){
+    public String saveAnswer(@ModelAttribute("answer") Answer answer, long questionId){
 
-        answerService.saveAnswer(answer, answerId);
+        answerService.saveAnswer(answer, questionId);
         return "";
     }
 
@@ -71,6 +76,27 @@ public class QuestionController {
     public String deleteAnswer(@RequestParam("answerId") long answerId){
 
         answerService.deleteAnswerById(answerId);
+        return "";
+    }
+
+    @PostMapping("/#")
+    public String saveComment(@ModelAttribute("comment") Comment comment, @RequestParam("answerId") long answerId){
+
+        commentService.saveComment(comment, answerId);
+        return "";
+    }
+
+    @PutMapping("/#")
+    public String updateComment(Model theModel, @RequestParam("commentId") long commentId){
+
+        theModel.addAttribute("answer", commentService.getByCommentById(commentId));
+        return "";
+    }
+
+    @DeleteMapping("/#")
+    public String deleteComment(@RequestParam("commentId") long commentId){
+
+        commentService.deleteCommentById(commentId);
         return "";
     }
 
