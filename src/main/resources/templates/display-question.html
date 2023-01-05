@@ -10,8 +10,17 @@
     </style>
 </head>
 <body>
-<h3 th:text=${question.title}></h3>
-<p th:text=${question.problem}></p>
-<p th:text="${question.expectation}"></p>
+    <h3 th:text=${question.title}></h3>
+    <p th:text=${question.problem}></p>
+    <p th:text="${question.expectation}"></p>
+    <span th:each="tag : ${question.tags}">
+        <span>[[${tag.name}]]</span>&nbsp
+    </span>
+    <form th:action="@{/update-question/{id}(id=${question.id})}" method="post">
+        <button type="submit">update</button>
+    </form>
+    <form th:action="@{/delete-question/{id}(id=${question.id})}" method="post">
+        <button type="submit">delete</button>
+    </form>
 </body>
 </html>

@@ -34,7 +34,7 @@ public class Question {
 	private String expectation;
 	
 	@CreationTimestamp
-	@Column(name="created_at")
+	@Column(name="created_at", updatable = false)
 	private Timestamp createdAt; 
 	
 	@UpdateTimestamp

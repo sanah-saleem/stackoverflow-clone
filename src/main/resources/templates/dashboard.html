@@ -39,7 +39,7 @@
     <br>
     <br>
 <div th:each="question : ${questions}">
-    <form th:action="@{/display-question}">
+    <form th:action="@{/display-question}" method="post">
         <input type="hidden" name="questionId" th:value="${question.id}">
         <button id="button" type="submit">
            <div>

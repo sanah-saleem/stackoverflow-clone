@@ -10,6 +10,7 @@ public interface TagService {
 
     List<Tag> getAllTags();
 
-    public void deleteTag(Tag tag);
+    String getAllTags(long questionId);
+
     public boolean checkTag(String tagName);
 }
