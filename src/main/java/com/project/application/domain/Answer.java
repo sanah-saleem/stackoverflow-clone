@@ -1,6 +1,8 @@
 package com.project.application.domain;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,5 +41,16 @@ public class Answer {
             CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "question_id")
     private Question question;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "answer_id")
+	private List<Comment> comments;
+
+	public void addComment(Comment comment){
+		if(comments == null){
+			comments = new ArrayList<>();
+		}
+		comments.add(comment);
+	}
 	
 }
