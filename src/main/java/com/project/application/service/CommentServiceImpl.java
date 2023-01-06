@@ -16,8 +16,8 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public void saveComment(Comment comment, long answerId) {
         Answer answer=answerService.getAnswerById(answerId);
-        commentRepository.save(comment);
         answer.addComment(comment);
+        commentRepository.save(comment);
     }
 
     @Override

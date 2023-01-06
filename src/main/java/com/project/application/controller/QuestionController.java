@@ -51,30 +51,26 @@ public class QuestionController {
 
         Question question = questionService.getQuestionById(questionId);
         theModel.addAttribute("question", question);
-
-//        List<Answer> answers = answerService.getAllAnswers();
-//        theModel.addAttribute("answers", question.getAnswers());
-
+        theModel.addAttribute("newAnswer", new Answer());
         return "display-question";
     }
 
-    @PostMapping("/#answer")
-    public String saveAnswer(@ModelAttribute("answer") Answer answer, long questionId){
-
+    @PostMapping("/save-answer")
+    public String saveAnswer(@ModelAttribute("answer") Answer answer,
+                             @RequestParam("questionId") long questionId, Model theModel){
         answerService.saveAnswer(answer, questionId);
-        return "";
+        return getQuestion(theModel, questionId);
     }
 
-    @PostMapping("/#answerupdate")
-    public String updateAnswer(Model theModel, @RequestParam("answerId") long answerId){
-
-        theModel.addAttribute("answer", answerService.getAnswerById(answerId));
-        return "";
+    @PostMapping("/update-answer/{id}")
+    public String updateAnswer(Model theModel, @PathVariable("id") long answerId,
+                                        @RequestParam("questionId") long questionId){
+//        theModel.addAttribute("answer", answerService.getAnswerById(answerId));
+        return saveAnswer(answerService.getAnswerById(answerId), questionId, theModel);
     }
 
-    @PostMapping("/#answerdelete")
-    public String deleteAnswer(@RequestParam("answerId") long answerId){
-
+    @PostMapping("/delete-answer/{id}")
+    public String deleteAnswer(@PathVariable("answerId") long answerId, @RequestParam("questionId")){
         answerService.deleteAnswerById(answerId);
         return "";
     }

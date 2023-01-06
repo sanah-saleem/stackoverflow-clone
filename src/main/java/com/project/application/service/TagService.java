@@ -8,8 +8,9 @@ import java.util.Set;
 public interface TagService {
     List<Tag> saveTag(List<String> tagNames);
 
+    List<Tag> getAllTags(int questionId);
+
     List<Tag> getAllTags();
 
-    public void deleteTag(Tag tag);
     public boolean checkTag(String tagName);
 }
