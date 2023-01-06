@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -34,13 +32,13 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getAllTags() {
-        return tagRepository.findAll();
+    public List<Tag> getAllTags(int questionId) {
+        return tagRepository.findAll(questionId);
     }
 
     @Override
-    public void deleteTag(Tag tag) {
-
+    public List<Tag> getAllTags() {
+        return tagRepository.findAll();
     }
 
     @Override

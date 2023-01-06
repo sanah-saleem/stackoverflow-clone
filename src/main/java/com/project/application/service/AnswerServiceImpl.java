@@ -15,13 +15,16 @@ public class AnswerServiceImpl implements AnswerService{
 
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private QuestionRepository questionRepository;
 
 
     @Override
     public void saveAnswer(Answer answer, long questionId) {
         Question question=questionService.getQuestionById(questionId);
-        answerRepository.save(answer);
+//        answerRepository.save(answer);
         question.addAnswer(answer);
+        answerRepository.save(answer);
     }
 
     @Override
