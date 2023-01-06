@@ -27,6 +27,7 @@
         <br><br>
         <h3>Title</h3>
         <form th:action="@{/post-question}" th:object="${question}" method="post">
+            <input type="hidden" th:field="*{id}">
             <input class="input"  type="text" th:name="title" th:value="${question?.title}" placeholder="Enter the title for your question"/>
             <br><br>
             <h4>What are the details of your problem?</h4>

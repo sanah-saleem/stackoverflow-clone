@@ -19,7 +19,7 @@ public class Answer {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY )
-	@Column(name="id")
+	@Column(name="id", updatable = false)
 	private long id;
 	
 	@Column(name="content")
