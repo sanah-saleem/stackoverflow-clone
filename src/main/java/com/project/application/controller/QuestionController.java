@@ -33,7 +33,7 @@ public class QuestionController {
         return "dashboard";
     }
 
-    @GetMapping("/ask-question")
+    @PostMapping("/ask-question")
     public String askQuestion(Model model) {
         model.addAttribute("question", new Question());
         return "input-question";
