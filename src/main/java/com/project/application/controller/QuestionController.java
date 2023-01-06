@@ -48,7 +48,6 @@ public class QuestionController {
 
     @GetMapping("/display-question")
     public String getQuestion(Model theModel, @RequestParam("questionId") long questionId){
-
         Question question = questionService.getQuestionById(questionId);
         theModel.addAttribute("question", question);
         theModel.addAttribute("newAnswer", new Answer());
@@ -65,14 +64,24 @@ public class QuestionController {
     @PostMapping("/update-answer/{id}")
     public String updateAnswer(Model theModel, @PathVariable("id") long answerId,
                                         @RequestParam("questionId") long questionId){
-//        theModel.addAttribute("answer", answerService.getAnswerById(answerId));
-        return saveAnswer(answerService.getAnswerById(answerId), questionId, theModel);
+        Question question = questionService.getQuestionById(questionId);
+        theModel.addAttribute("question", question);
+        theModel.addAttribute("newAnswer", answerService.getAnswerById(answerId));
+        answerService.deleteAnswerById(answerId);
+        return "display-question";
     }
 
     @PostMapping("/delete-answer/{id}")
-    public String deleteAnswer(@PathVariable("answerId") long answerId, @RequestParam("questionId")){
+    public String deleteAnswer(@PathVariable("id") long answerId,
+                               @RequestParam("questionId") long questionId, Model model){
         answerService.deleteAnswerById(answerId);
-        return "";
+        return getQuestion(model, questionId);
+    }
+
+    @PostMapping("/delete-question/{id}")
+    public String deleteQuestion(@PathVariable("id") long questionId, Model model){
+        questionService.deleteQuestionById(questionId);
+        return "redirect:/";
     }
 
     @PostMapping("/#comment")
