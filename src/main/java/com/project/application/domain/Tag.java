@@ -24,7 +24,7 @@ public class Tag {
 	private String name;
 	
 	@CreationTimestamp
-	@Column(name="created_at")
+	@Column(name="created_at", updatable = false)
 	private Timestamp createdAt; 
 	
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})

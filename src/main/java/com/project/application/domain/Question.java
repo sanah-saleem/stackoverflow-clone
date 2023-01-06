@@ -34,14 +34,15 @@ public class Question {
 	private String expectation;
 	
 	@CreationTimestamp
-	@Column(name="created_at")
+	@Column(name="created_at", updatable = false)
 	private Timestamp createdAt; 
 	
 	@UpdateTimestamp
 	@Column(name="updated_at")
 	private Timestamp updatedAt;
 	
-	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "question_id")
     private List<Answer> answers;
 	
 	@ManyToMany(cascade = {
