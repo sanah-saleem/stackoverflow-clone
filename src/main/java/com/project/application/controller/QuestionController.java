@@ -35,7 +35,7 @@ public class QuestionController {
 
     @GetMapping("/ask-question")
     public String askQuestion(Model model) {
-        model.addAttribute(new Question());
+        model.addAttribute("question", new Question());
         return "input-question";
     }
 
@@ -58,6 +58,13 @@ public class QuestionController {
         theModel.addAttribute("newAnswer", new Answer());
         theModel.addAttribute("newComment", new Comment());
         return "display-question";
+    }
+
+    @PostMapping("/update-question/{id}")
+    public String updateQuestion(@PathVariable("id") long questionId, Model theModel) {
+        Question question = questionService.getQuestionById(questionId);
+        theModel.addAttribute("question", question);
+        return "input-question";
     }
 
     @PostMapping("/save-answer")
@@ -83,6 +90,7 @@ public class QuestionController {
         answerService.deleteAnswerById(answerId);
         return getQuestion(model, questionId, 0);
     }
+
 
     @PostMapping("/delete-question/{id}")
     public String deleteQuestion(@PathVariable("id") long questionId, Model model){
