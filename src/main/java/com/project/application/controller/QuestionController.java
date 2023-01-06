@@ -47,10 +47,16 @@ public class QuestionController {
     }
 
     @GetMapping("/display-question")
-    public String getQuestion(Model theModel, @RequestParam("questionId") long questionId){
+    public String getQuestion(Model theModel,
+                              @RequestParam("questionId") long questionId,
+                              @RequestParam(value="showCommentForId", required = false) Integer id){
+        if (id==null)
+        id=0;
         Question question = questionService.getQuestionById(questionId);
         theModel.addAttribute("question", question);
+        theModel.addAttribute("showCommentForId", id);
         theModel.addAttribute("newAnswer", new Answer());
+        theModel.addAttribute("newComment", new Comment());
         return "display-question";
     }
 
@@ -58,7 +64,7 @@ public class QuestionController {
     public String saveAnswer(@ModelAttribute("answer") Answer answer,
                              @RequestParam("questionId") long questionId, Model theModel){
         answerService.saveAnswer(answer, questionId);
-        return getQuestion(theModel, questionId);
+        return getQuestion(theModel, questionId, 0);
     }
 
     @PostMapping("/update-answer/{id}")
@@ -75,7 +81,7 @@ public class QuestionController {
     public String deleteAnswer(@PathVariable("id") long answerId,
                                @RequestParam("questionId") long questionId, Model model){
         answerService.deleteAnswerById(answerId);
-        return getQuestion(model, questionId);
+        return getQuestion(model, questionId, 0);
     }
 
     @PostMapping("/delete-question/{id}")
@@ -84,25 +90,19 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @PostMapping("/#comment")
-    public String saveComment(@ModelAttribute("comment") Comment comment, @RequestParam("answerId") long answerId){
-
+    @PostMapping("/save-comment")
+    public String saveComment(@ModelAttribute("comment") Comment comment,
+                              @RequestParam("answerId") long answerId, Model theModel,
+                              @RequestParam("questionId") long questionId){
         commentService.saveComment(comment, answerId);
-        return "";
+        return getQuestion(theModel, questionId, 0);
     }
 
-    @PostMapping("/#commentupdate")
-    public String updateComment(Model theModel, @RequestParam("commentId") long commentId){
-
-        theModel.addAttribute("answer", commentService.getCommentById(commentId));
-        return "";
-    }
-
-    @PostMapping("/#commentdelete")
-    public String deleteComment(@RequestParam("commentId") long commentId){
-
+    @PostMapping("/delete-comment/{id}")
+    public String deleteComment(@PathVariable("id") long commentId, Model theModel,
+                                @RequestParam("questionId") long questionId){
         commentService.deleteCommentById(commentId);
-        return "";
+        return getQuestion(theModel, questionId, 0);
     }
 
 }
