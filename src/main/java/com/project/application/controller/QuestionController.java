@@ -58,42 +58,42 @@ public class QuestionController {
         return "display-question";
     }
 
-    @PostMapping("/#")
+    @PostMapping("/#answer")
     public String saveAnswer(@ModelAttribute("answer") Answer answer, long questionId){
 
         answerService.saveAnswer(answer, questionId);
         return "";
     }
 
-    @PutMapping("/#")
+    @PostMapping("/#answerupdate")
     public String updateAnswer(Model theModel, @RequestParam("answerId") long answerId){
 
         theModel.addAttribute("answer", answerService.getAnswerById(answerId));
         return "";
     }
 
-    @DeleteMapping("/#")
+    @PostMapping("/#answerdelete")
     public String deleteAnswer(@RequestParam("answerId") long answerId){
 
         answerService.deleteAnswerById(answerId);
         return "";
     }
 
-    @PostMapping("/#")
+    @PostMapping("/#comment")
     public String saveComment(@ModelAttribute("comment") Comment comment, @RequestParam("answerId") long answerId){
 
         commentService.saveComment(comment, answerId);
         return "";
     }
 
-    @PutMapping("/#")
+    @PostMapping("/#commentupdate")
     public String updateComment(Model theModel, @RequestParam("commentId") long commentId){
 
         theModel.addAttribute("answer", commentService.getCommentById(commentId));
         return "";
     }
 
-    @DeleteMapping("/#")
+    @PostMapping("/#commentdelete")
     public String deleteComment(@RequestParam("commentId") long commentId){
 
         commentService.deleteCommentById(commentId);

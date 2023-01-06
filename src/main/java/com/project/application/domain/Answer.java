@@ -29,18 +29,18 @@ public class Answer {
 	private boolean isAccepted = false;
 	
 	@CreationTimestamp
-	@Column(name="created_at")
+	@Column(name="created_at", updatable = false)
 	private Timestamp createdAt; 
 	
 	@UpdateTimestamp
 	@Column(name="updated_at")
 	private Timestamp updatedAt;
 	
-	@ManyToOne(cascade = {
-            CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "question_id")
-    private Question question;
+//	@ManyToOne(cascade = {
+//            CascadeType.DETACH, CascadeType.MERGE,
+//            CascadeType.PERSIST, CascadeType.REFRESH})
+//    @JoinColumn(name = "question_id")
+//    private Question question;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "answer_id")
