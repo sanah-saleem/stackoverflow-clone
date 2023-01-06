@@ -35,12 +35,6 @@ public class Answer {
 	@UpdateTimestamp
 	@Column(name="updated_at")
 	private Timestamp updatedAt;
-	
-//	@ManyToOne(cascade = {
-//            CascadeType.DETACH, CascadeType.MERGE,
-//            CascadeType.PERSIST, CascadeType.REFRESH})
-//    @JoinColumn(name = "question_id")
-//    private Question question;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "answer_id")
