@@ -57,4 +57,28 @@ public class QuestionServiceImpl implements QuestionService{
         questionRepository.deleteById(questionId);
     }
 
+    @Override
+    public Set<Question> getSearchedOrFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer) {
+
+        Set<Question> resultedQuestions = null;
+        if(searchKey != null){
+
+//           List<Question> resultedQuestionsWithSearchKey = questionRepository.findAllWithSearchKey(searchKey);
+//           resultedQuestions.addAll(questionRepository.findAllQuestionsWithSearchKey(searchKey));
+        }
+
+        if(filterByNoAnswer){
+
+//            List<Question> questionsWithNoAnswer = questionRepository.findAllQuestionsWithNoAnswer();
+//            resultedQuestions.addAll(questionRepository.findAllQuestionsWithNoAnswer());
+        }
+
+        if(filterByTags != null){
+
+//            resultedQuestions.addAll(questionRepository.findAllQuestionsWithTags(filterByTags));
+        }
+        return resultedQuestions;
+    }
+
+
 }

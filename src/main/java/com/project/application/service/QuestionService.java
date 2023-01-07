@@ -3,6 +3,7 @@ package com.project.application.service;
 import com.project.application.domain.Question;
 
 import java.util.List;
+import java.util.Set;
 
 public interface QuestionService {
     List<Question> getAllQuestons();
@@ -14,4 +15,7 @@ public interface QuestionService {
     void updateQuestion(Question question, long questionId);
 
     void deleteQuestionById(long questionId);
+
+    Set<Question> getSearchedOrFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer);
+
 }

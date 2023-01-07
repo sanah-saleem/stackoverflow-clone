@@ -26,7 +26,7 @@ public class QuestionController {
     CommentService commentService;
 
     @GetMapping(value={"/","/dashboard"})
-    public String home(Model theModel){
+    public String home(Model theModel, @RequestParam(value = "filters", required = false) String filters, @RequestParam(value = "sort", required = false) String sort, @RequestParam(value = "tags", required = false) String tags){
 
         List<Question> questions = questionService.getAllQuestons();
         theModel.addAttribute("questions", questions);
