@@ -2,6 +2,7 @@ package com.project.application.domain;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -33,6 +34,17 @@ public class Tag {
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id"))
     private Set<Question> questions;
+
+	@ManyToMany(targetEntity=Author.class, fetch=FetchType.LAZY, cascade =
+			{CascadeType.DETACH,
+					CascadeType.MERGE,
+					CascadeType.PERSIST,
+					CascadeType.REFRESH})
+	@JoinTable(
+			name="author_tag",
+			joinColumns=@JoinColumn(name="tag_id"),
+			inverseJoinColumns=@JoinColumn(name="author_id"))
+	List<Author> authorsWatching;
 	
 	public void addQuestion(Question question) {
         if (questions == null) {

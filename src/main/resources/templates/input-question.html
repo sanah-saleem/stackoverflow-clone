@@ -31,10 +31,10 @@
             <input class="input"  type="text" th:name="title" th:value="${question?.title}" placeholder="Enter the title for your question"/>
             <br><br>
             <h4>What are the details of your problem?</h4>
-            <input class="textarea" type="textarea" th:name="problem" th:value="${question?.problem}" />
+            <textarea id="problem" type="textarea" th:name="problem" th:value="${question?.problem}" />
             <br><br>
             <h4>What did you try and what were you expecting?</h4>
-            <input class="textarea" type="textarea" th:name="expectation" th:value="${question?.expectation}" />
+            <textarea id="expectation" type="textarea" th:name="expectation" th:value="${question?.expectation}" />
             <br><br>
             <h4>Tags</h4>
             <input class="input" type="text" name="tag" th:value="${questionTags}">

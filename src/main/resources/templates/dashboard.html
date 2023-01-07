@@ -66,7 +66,7 @@
     </style>
 </head>
 <body>
-<div id="header">
+<div th:fragment="site-header" id="header">
     <div class="container">
         <h3>stack Overflow</h3>&nbsp&nbsp
         <input style="height: 30px; margin: 10px;" type="search" th:formaction="@{/search}" name="searchKey" placeholder="Search..">

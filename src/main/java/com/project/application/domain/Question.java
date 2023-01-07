@@ -38,6 +38,9 @@ public class Question {
 	@UpdateTimestamp
 	@Column(name="updated_at")
 	private Timestamp updatedAt;
+
+	@Column(name="has_accepted_answer")
+	private boolean hasAcceptedAnswer;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "question_id")
