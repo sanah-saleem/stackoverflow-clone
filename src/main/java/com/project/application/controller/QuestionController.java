@@ -113,4 +113,12 @@ public class QuestionController {
         return getQuestion(theModel, questionId, 0);
     }
 
+    @GetMapping("/search")
+    public String searchQuestions(Model theModel, @RequestParam(value = "searchKey") String searchKey){
+
+        List<Question> questionsWithSearchKey = questionService.getSearchedQuestions(searchKey);
+        theModel.addAttribute(questionsWithSearchKey);
+        return "dashboard";
+    }
+
 }

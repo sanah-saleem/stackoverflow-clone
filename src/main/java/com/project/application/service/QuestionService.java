@@ -16,6 +16,6 @@ public interface QuestionService {
 
     void deleteQuestionById(long questionId);
 
-    Set<Question> getSearchedOrFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer);
+    List<Question> getSearchedQuestions(String searchKey);
 
 }

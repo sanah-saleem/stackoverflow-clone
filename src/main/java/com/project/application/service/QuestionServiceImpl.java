@@ -58,24 +58,12 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Set<Question> getSearchedOrFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer) {
+    public List<Question> getSearchedQuestions(String searchKey) {
 
-        Set<Question> resultedQuestions = null;
-        if(searchKey != null){
+        List<Question> resultedQuestions = null;
+        if (searchKey != null) {
 
-//           List<Question> resultedQuestionsWithSearchKey = questionRepository.findAllWithSearchKey(searchKey);
-//           resultedQuestions.addAll(questionRepository.findAllQuestionsWithSearchKey(searchKey));
-        }
-
-        if(filterByNoAnswer){
-
-//            List<Question> questionsWithNoAnswer = questionRepository.findAllQuestionsWithNoAnswer();
-//            resultedQuestions.addAll(questionRepository.findAllQuestionsWithNoAnswer());
-        }
-
-        if(filterByTags != null){
-
-//            resultedQuestions.addAll(questionRepository.findAllQuestionsWithTags(filterByTags));
+            resultedQuestions.findAllQuestionsWithSearchKey(searchKey);
         }
         return resultedQuestions;
     }
