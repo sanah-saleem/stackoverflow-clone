@@ -76,7 +76,7 @@
     <div style="min-width:25%;display:inline-block;border-"></div>
     <div class="div">
         <h3 style="display:inline-block;">ALL QUESTIONS</h3>
-        <form style="display:inline-block;padding-left:40%;" th:action="@{/ask-question}">
+        <form style="display:inline-block;padding-left:40%;" th:action="@{/ask-question}" method="post">
             <button class=button;type="submit">Ask Question</button>
         </form>
         <br>
@@ -123,19 +123,19 @@
 
         </div>
         <br><br>
-    <div th:each="question : ${questions}">
-        <form th:action="@{/display-question}">
-            <input type="hidden" name="questionId" th:value="${question.id}">
-            <button id="button" type="submit">
-               <div>
-                   <h2 th:text=${question.title}></h2>
-                   <p th:text=${question.problem}></p>
-               </div>
-            </button>
-            <br>
-            <br>
-        </form>
-    </div>
+        <div th:each="question : ${questions}">
+            <form th:action="@{/display-question}">
+                <input type="hidden" name="questionId" th:value="${question.id}">
+                <button id="button" type="submit">
+                    <div>
+                        <h2 th:text=${question.title}></h2>
+                        <p th:text=${question.problem}></p>
+                    </div>
+                </button>
+                <br>
+                <br>
+            </form>
+        </div>
     </div>
     <div style="min-width:25%;display:inline-block"></div>
 </div>
