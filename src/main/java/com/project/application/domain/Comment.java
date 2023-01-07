@@ -32,6 +32,10 @@ public class Comment {
     @Column(name="created_at", updatable = false)
     private Timestamp createdAt;
 
+    @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name="author_id")
+    private Author author;
+
 //    @ManyToOne(cascade = {
 //            CascadeType.DETACH, CascadeType.MERGE,
 //            CascadeType.PERSIST, CascadeType.REFRESH})

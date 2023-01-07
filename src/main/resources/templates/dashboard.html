@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+                 xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>dashboard</title>
@@ -15,6 +16,7 @@
         top: 5px;
         justify-content: space-around;
         width: 100%;
+        align-items: center;
 <!--        margin: 3px;-->
 <!--        padding: 5px;-->
       }
@@ -70,6 +72,16 @@
     <div class="container">
         <h3>stack Overflow</h3>&nbsp&nbsp
         <input style="height: 30px; margin: 10px;" type="search" th:formaction="@{/search}" name="searchKey" placeholder="Search..">
+        <div sec:authorize="isAnonymous()" style="margin:10px;">
+            <form th:action="@{/login}" method="post">
+                <input type="submit" value="Log In">
+            </form>
+        </div>
+        <div sec:authorize="isAuthenticated()" style="margin:10px;">
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Log Out">
+            </form>
+        </div>
     </div>
 </div><br><br>
 <div id="content">

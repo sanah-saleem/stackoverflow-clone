@@ -7,10 +7,12 @@ import com.project.application.service.AnswerService;
 import com.project.application.service.QuestionService;
 import com.project.application.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -30,6 +32,7 @@ public class QuestionController {
 
         List<Question> questions = questionService.getAllQuestons();
         theModel.addAttribute("questions", questions);
+
         return "dashboard";
     }
 
@@ -57,6 +60,7 @@ public class QuestionController {
         theModel.addAttribute("showCommentForId", id);
         theModel.addAttribute("newAnswer", new Answer());
         theModel.addAttribute("newComment", new Comment());
+        theModel.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
         return "display-question";
     }
 

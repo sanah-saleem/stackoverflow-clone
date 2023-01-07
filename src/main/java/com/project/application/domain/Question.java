@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -40,7 +42,7 @@ public class Question {
 	private Timestamp updatedAt;
 
 	@Column(name="has_accepted_answer")
-	private boolean hasAcceptedAnswer;
+	private Boolean hasAcceptedAnswer;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "question_id")
@@ -54,6 +56,10 @@ public class Question {
         joinColumns = @JoinColumn(name = "question_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
+
+	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinColumn(name="author_id")
+	private Author author;
 	
 	public void addAnswer(Answer answer) {
         if (answers == null) {

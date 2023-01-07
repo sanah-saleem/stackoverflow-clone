@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+H1{
+        margin-bottom:0px;
+}
+p{
+        margin-top:0px;
+}
+body{
+         background-color:#F0E9D2;
+         padding-top : 200px;
+}
+#first{
+         background-color: #E6DDC4;
+         margin-left:35%;
+         width:550px;
+         padding:10px 30px;
+}
+#second{
+         background-color:white;
+         margin-left:35%;
+         width:550px;
+         padding:10px 30px;
+}
+input{
+         width:90%;
+         height:40%;
+         font-size:20px;
+         padding top:5px;
+         padding bottom:5px;
+}
+#submit{
+         width:70px;
+         height:30px;
+         background: #DAE2B6;
+	     color: wite;
+	     border: 1px solid #eee;
+	     border-radius: 30px;
+	     box-shadow: 5px 5px 5px #eee;
+	     text-shadow: none;
+         margin:10%;
+         margin-left:40%;
+         margin-bottom:8%;
+}
+</style>
+</head>
+<body>
+<div id=first>
+  <H1>Login</H1>
+  <p>please enter your credentials</p>
+
+</div>
+<div id=second>
+  <form th:action="@{/authenticateUser}" method="post">
+    <h3>User name</h3>
+    <input  type="text" name="username" required>
+    <h3>Password</h3>
+    <input  type="password" name="password" required>
+    <input  id="submit" type="submit" value="login">
+  </form>
+  <small>Don't have an account? <a th:href="@{/registration}"><h3 style="margin:0;">Sign-Up</h3></a></small>
+</div>
+</body>
+</html>

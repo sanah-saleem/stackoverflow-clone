@@ -19,23 +19,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomAuthorDetailService customAuthorDetailService;
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/**")
-                .permitAll()
-                .antMatchers(HttpMethod.POST,"/**")
-                .authenticated()
-                .antMatchers("/**")
-                .hasAnyRole("ADMIN","USER")
-                .anyRequest()
-                .authenticated()
-                .and()
-                .formLogin();
-    }
-
-    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customAuthorDetailService).passwordEncoder(passwordEncoder());
     }
@@ -44,4 +27,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET,"/**")
+                .permitAll()
+                .antMatchers("/ask-question/**", "/save-answer/**", "/save-comment/**")
+                .hasAnyRole("ADMIN","USER")
+                .and()
+                .httpBasic()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/authenticateUser")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+                .permitAll();
+    }
+
+
 }

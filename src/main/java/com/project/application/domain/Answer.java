@@ -40,6 +40,10 @@ public class Answer {
 	@JoinColumn(name = "answer_id")
 	private List<Comment> comments;
 
+	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinColumn(name="author_id")
+	private Author author;
+
 	public void addComment(Comment comment){
 		if(comments == null){
 			comments = new ArrayList<>();
