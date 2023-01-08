@@ -5,7 +5,7 @@ import com.project.application.domain.Comment;
 public interface CommentService {
 
 
-void saveComment(Comment comment,long answerId);
+void saveComment(Comment comment,long answerId, String email);
 
 
 void updateComment(Comment comment,long commentId);

@@ -5,7 +5,7 @@ import com.project.application.domain.Answer;
 import java.util.List;
 
 public interface AnswerService {
-    void saveAnswer(Answer answer,long questionId);
+    void saveAnswer(Answer answer,long questionId, String email);
 
     void updateAnswer(Answer answer,long answerId);
 

@@ -7,10 +7,12 @@ import com.project.application.service.AnswerService;
 import com.project.application.service.QuestionService;
 import com.project.application.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -25,11 +27,14 @@ public class QuestionController {
     @Autowired
     CommentService commentService;
 
+//    String email = ;
+
     @GetMapping(value={"/","/dashboard"})
     public String home(Model theModel, @RequestParam(value = "filters", required = false) String filters, @RequestParam(value = "sort", required = false) String sort, @RequestParam(value = "tags", required = false) String tags){
 
         List<Question> questions = questionService.getAllQuestons();
         theModel.addAttribute("questions", questions);
+
         return "dashboard";
     }
 
@@ -42,7 +47,7 @@ public class QuestionController {
     @PostMapping("/post-question")
     public String saveQuestion(@ModelAttribute("question") Question question, @RequestParam("tag") String tags){
 
-        questionService.saveQuestion(question, tags);
+        questionService.saveQuestion(question, tags, SecurityContextHolder.getContext().getAuthentication().getName());
         return "redirect:/";
     }
 
@@ -57,6 +62,7 @@ public class QuestionController {
         theModel.addAttribute("showCommentForId", id);
         theModel.addAttribute("newAnswer", new Answer());
         theModel.addAttribute("newComment", new Comment());
+        theModel.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
         return "display-question";
     }
 
@@ -70,7 +76,7 @@ public class QuestionController {
     @PostMapping("/save-answer")
     public String saveAnswer(@ModelAttribute("answer") Answer answer,
                              @RequestParam("questionId") long questionId, Model theModel){
-        answerService.saveAnswer(answer, questionId);
+        answerService.saveAnswer(answer, questionId, SecurityContextHolder.getContext().getAuthentication().getName());
         return getQuestion(theModel, questionId, 0);
     }
 
@@ -102,7 +108,7 @@ public class QuestionController {
     public String saveComment(@ModelAttribute("comment") Comment comment,
                               @RequestParam("answerId") long answerId, Model theModel,
                               @RequestParam("questionId") long questionId){
-        commentService.saveComment(comment, answerId);
+        commentService.saveComment(comment, answerId, SecurityContextHolder.getContext().getAuthentication().getName());
         return getQuestion(theModel, questionId, 0);
     }
 

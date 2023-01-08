@@ -1,6 +1,7 @@
 package com.project.application.service;
 
 import com.project.application.domain.Answer;
+import com.project.application.domain.Author;
 import com.project.application.domain.Comment;
 import com.project.application.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,19 @@ public class CommentServiceImpl implements CommentService{
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private AuthorService authorService;
+
     @Override
-    public void saveComment(Comment comment, long answerId) {
+    public void saveComment(Comment comment, long answerId, String email) {
         Answer answer=answerService.getAnswerById(answerId);
         answer.addComment(comment);
+
+        Author author = authorService.findByEmail(email);
+        author.addComment(comment);
+
         commentRepository.save(comment);
+
     }
 
     @Override
