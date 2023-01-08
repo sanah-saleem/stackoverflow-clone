@@ -86,14 +86,14 @@ public class QuestionController {
         Question question = questionService.getQuestionById(questionId);
         theModel.addAttribute("question", question);
         theModel.addAttribute("newAnswer", answerService.getAnswerById(answerId));
-        answerService.deleteAnswerById(answerId);
+        answerService.deleteAnswerById(answerId,questionId);
         return "display-question";
     }
 
     @PostMapping("/delete-answer/{id}")
     public String deleteAnswer(@PathVariable("id") long answerId,
                                @RequestParam("questionId") long questionId, Model model){
-        answerService.deleteAnswerById(answerId);
+        answerService.deleteAnswerById(answerId,questionId);
         return getQuestion(model, questionId, 0);
     }
 
@@ -117,6 +117,12 @@ public class QuestionController {
                                 @RequestParam("questionId") long questionId){
         commentService.deleteCommentById(commentId);
         return getQuestion(theModel, questionId, 0);
+    }
+
+    @PostMapping("/accept-answer/{id}")
+    public String acceptAnswer(@PathVariable("id") long answerId,@RequestParam("questionId") long questionId,Model theModel){
+        answerService.acceptAnswer(answerId,questionId);
+        return getQuestion(theModel,questionId,0);
     }
 
 }

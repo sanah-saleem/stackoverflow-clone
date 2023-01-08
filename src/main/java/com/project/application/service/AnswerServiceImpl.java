@@ -55,9 +55,46 @@ public class AnswerServiceImpl implements AnswerService{
     }
 
     @Override
-    public void deleteAnswerById(long answerId) {
+    public void deleteAnswerById(long answerId,long questionId) {
+
+        Answer answer=answerRepository.findById(answerId).get();
+        if(answer.isAccepted()){
+           Question question=questionService.getQuestionById(questionId);
+           question.setHasAcceptedAnswer(false);
+           questionRepository.save(question);
+        }
         answerRepository.deleteById(answerId);
     }
-
-
+    @Override
+    public void acceptAnswer(long answerId,long questionId){
+        Question question=questionService.getQuestionById(questionId);
+        if(question.getHasAcceptedAnswer()){
+                Answer previousAcceptedAnswer = answerWhichGotAccepted(questionId);
+                previousAcceptedAnswer.setAccepted(false);
+                answerRepository.save(previousAcceptedAnswer);
+                Answer answer=getAnswerById(answerId);
+                answer.setAccepted(true);
+                answerRepository.save(answer);
+                questionRepository.save(question);
+            }
+        else{
+                Answer answer = getAnswerById(answerId);
+                answer.setAccepted(true);
+                answerRepository.save(answer);
+                question.setHasAcceptedAnswer(true);
+                questionRepository.save(question);
+        }
+    }
+    public Answer answerWhichGotAccepted(long questionId){
+        Question question=questionService.getQuestionById(questionId);
+        for(Answer answer : question.getAnswers()){
+            System.out.println(answer.isAccepted());
+            if(answer.isAccepted()){
+                return answer;
+            }
+        }
+        return null;
+    }
 }
+
+
