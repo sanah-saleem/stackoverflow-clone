@@ -13,5 +13,7 @@ public interface AnswerService {
 
     List<Answer> getAllAnswers();
 
-    void deleteAnswerById(long answerId);
+    void deleteAnswerById(long answerId,long questionId);
+
+    void acceptAnswer(long answerId,long questionId);
 }
