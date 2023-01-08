@@ -28,7 +28,7 @@ public class Author {
     private String password;
 
     @Column(name="role")
-    private String authorRole = "ROLE_ADMIN";
+    private String authorRole = "ROLE_USER";
 
     @ManyToMany(targetEntity=Tag.class, fetch=FetchType.EAGER, cascade =
             {CascadeType.DETACH,
