@@ -8,7 +8,7 @@ import java.util.Set;
 public interface QuestionService {
     List<Question> getAllQuestons();
 
-    void saveQuestion(Question question, String tagName);
+    void saveQuestion(Question question, String tagName, String email);
 
     Question getQuestionById(long questionId);
 

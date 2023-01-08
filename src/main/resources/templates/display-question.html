@@ -36,7 +36,7 @@
     <p th:text="${question.expectation}"></p>
     <span th:each="tag : ${question.tags}">
             <span>[[${tag.name}]]</span>&nbsp
-        </span>
+    </span>
 
     <div sec:authorize="hasRole('ROLE_ADMIN')">
         <form th:action="@{/update-question/{id}(id=${question.id})}" method="post">
@@ -47,14 +47,13 @@
         </form><br><br>
     </div>
     <div sec:authorize="hasRole('ROLE_USER')">
-        <span th:text="${question.author.email}"></span>
-<!--        <div th:if="#strings.equals(username, question.author.email)">-->
-<!--            <form th:action="@{/update-question/{id}(id=${question.id})}" method="post">-->
-<!--                <button type="submit">update</button>-->
-<!--            </form>-->
-<!--            <form th:action="@{/delete-question/{id}(id=${question.id})}" method="post">-->
-<!--                <button type="submit">delete</button>-->
-<!--            </form><br><br>-->
+        <div th:if="${#strings.equals(username, question.author.email)}">
+            <form th:action="@{/update-question/{id}(id=${question.id})}" method="post">
+                <button type="submit">update</button>
+            </form>
+            <form th:action="@{/delete-question/{id}(id=${question.id})}" method="post">
+                <button type="submit">delete</button>
+            </form><br><br>
         </div>
     </div>
 
@@ -71,12 +70,11 @@
                 </form><br><br>
             </div>
             <div sec:authorize="hasRole('ROLE_USER')">
-                <span th:text="${comment.author.email}"></span>
-<!--                <div th:if="#strings.equals(username, comment.author.email)">-->
-<!--                    <form th:action="@{/delete-comment/{id}(id=${comment.id})}" method="post">-->
-<!--                        <input type="hidden" name="questionId" th:value="${question.id}">-->
-<!--                        <button type="submit">delete</button>-->
-<!--                    </form><br><br>-->
+                <div th:if="${#strings.equals(username, comment.author.email)}">
+                    <form th:action="@{/delete-comment/{id}(id=${comment.id})}" method="post">
+                        <input type="hidden" name="questionId" th:value="${question.id}">
+                        <button type="submit">delete</button>
+                    </form><br><br>
                 </div>
             </div>
         </div>
@@ -108,18 +106,17 @@
             </form><br>
         </div>
         <div sec:authorize="hasRole('ROLE_USER')">
-            <span th:text="${answer.author.email}"></span>
-<!--            <div th:if="#strings.equals(username, answer.author.email)">-->
-<!--                <form th:action="@{/update-answer/{id}(id=${answer.id})}" method="post">-->
-<!--                    <input type="hidden" name="questionId" th:value="${question.id}">-->
-<!--                    <button type="submit">update</button>-->
-<!--                </form>-->
+            <div th:if="${#strings.equals(username, answer.author.email)}">
+                <form th:action="@{/update-answer/{id}(id=${answer.id})}" method="post">
+                    <input type="hidden" name="questionId" th:value="${question.id}">
+                    <button type="submit">update</button>
+                </form>
 
-<!--                <form th:action="@{/delete-answer/{id}(id=${answer.id})}" method="post">-->
-<!--                    <input type="hidden" name="questionId" th:value="${question.id}">-->
-<!--                    <button type="submit">delete</button>-->
-<!--                </form><br>-->
-<!--            </div>-->
+                <form th:action="@{/delete-answer/{id}(id=${answer.id})}" method="post">
+                    <input type="hidden" name="questionId" th:value="${question.id}">
+                    <button type="submit">delete</button>
+                </form><br>
+            </div>
         </div>
 
     </div>

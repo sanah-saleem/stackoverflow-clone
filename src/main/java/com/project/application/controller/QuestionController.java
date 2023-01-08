@@ -27,6 +27,8 @@ public class QuestionController {
     @Autowired
     CommentService commentService;
 
+//    String email = ;
+
     @GetMapping(value={"/","/dashboard"})
     public String home(Model theModel, @RequestParam(value = "filters", required = false) String filters, @RequestParam(value = "sort", required = false) String sort, @RequestParam(value = "tags", required = false) String tags){
 
@@ -45,7 +47,7 @@ public class QuestionController {
     @PostMapping("/post-question")
     public String saveQuestion(@ModelAttribute("question") Question question, @RequestParam("tag") String tags){
 
-        questionService.saveQuestion(question, tags);
+        questionService.saveQuestion(question, tags, SecurityContextHolder.getContext().getAuthentication().getName());
         return "redirect:/";
     }
 
@@ -74,7 +76,7 @@ public class QuestionController {
     @PostMapping("/save-answer")
     public String saveAnswer(@ModelAttribute("answer") Answer answer,
                              @RequestParam("questionId") long questionId, Model theModel){
-        answerService.saveAnswer(answer, questionId);
+        answerService.saveAnswer(answer, questionId, SecurityContextHolder.getContext().getAuthentication().getName());
         return getQuestion(theModel, questionId, 0);
     }
 
@@ -106,7 +108,7 @@ public class QuestionController {
     public String saveComment(@ModelAttribute("comment") Comment comment,
                               @RequestParam("answerId") long answerId, Model theModel,
                               @RequestParam("questionId") long questionId){
-        commentService.saveComment(comment, answerId);
+        commentService.saveComment(comment, answerId, SecurityContextHolder.getContext().getAuthentication().getName());
         return getQuestion(theModel, questionId, 0);
     }
 

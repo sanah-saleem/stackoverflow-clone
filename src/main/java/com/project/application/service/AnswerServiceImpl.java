@@ -1,6 +1,7 @@
 package com.project.application.service;
 
 import com.project.application.domain.Answer;
+import com.project.application.domain.Author;
 import com.project.application.domain.Question;
 import com.project.application.repository.AnswerRepository;
 import com.project.application.repository.QuestionRepository;
@@ -18,13 +19,21 @@ public class AnswerServiceImpl implements AnswerService{
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    private AuthorService authorService;
+
 
     @Override
-    public void saveAnswer(Answer answer, long questionId) {
+    public void saveAnswer(Answer answer, long questionId, String email) {
         Question question=questionService.getQuestionById(questionId);
 //        answerRepository.save(answer);
         question.addAnswer(answer);
+
+        Author author = authorService.findByEmail(email);
+        author.addAnswer(answer);
+
         answerRepository.save(answer);
+
     }
 
     @Override

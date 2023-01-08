@@ -42,7 +42,7 @@ public class Question {
 	private Timestamp updatedAt;
 
 	@Column(name="has_accepted_answer")
-	private Boolean hasAcceptedAnswer;
+	private Boolean hasAcceptedAnswer = false;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "question_id")

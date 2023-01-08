@@ -1,5 +1,6 @@
 package com.project.application.service;
 
+import com.project.application.domain.Author;
 import com.project.application.domain.Question;
 import com.project.application.domain.Tag;
 import com.project.application.repository.QuestionRepository;
@@ -17,7 +18,10 @@ public class QuestionServiceImpl implements QuestionService{
     QuestionRepository questionRepository;
 
     @Autowired
-    TagService tagService;
+    private TagService tagService;
+
+    @Autowired
+    private AuthorService authorService;
 
 
     @Override
@@ -26,7 +30,7 @@ public class QuestionServiceImpl implements QuestionService{
         return questionRepository.findAll();
     }
     @Override
-    public void saveQuestion(Question question, String tagName){
+    public void saveQuestion(Question question, String tagName, String email){
 
         System.out.println(tagName);
         List<String> tagNames = Arrays.asList(tagName.split(","));
@@ -34,7 +38,12 @@ public class QuestionServiceImpl implements QuestionService{
         List<Tag> tags = tagService.saveTag(tagNames);
         System.out.println(tags);
         question.setTags(tags);
+        Author author = authorService.findByEmail(email);
+        author.addQuestion(question);
         questionRepository.save(question);
+
+
+        System.out.println(author.getEmail());
     }
 
     @Override
