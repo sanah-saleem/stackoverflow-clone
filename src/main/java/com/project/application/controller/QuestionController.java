@@ -7,6 +7,7 @@ import com.project.application.service.AnswerService;
 import com.project.application.service.QuestionService;
 import com.project.application.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,15 +28,28 @@ public class QuestionController {
     @Autowired
     CommentService commentService;
 
-//    String email = ;
 
     @GetMapping(value={"/","/dashboard"})
-    public String home(Model theModel, @RequestParam(value = "filters", required = false) String filters, @RequestParam(value = "sort", required = false) String sort, @RequestParam(value = "tags", required = false) String tags){
+    public String home(Model theModel, @RequestParam(value = "filters", required = false) String filters, @RequestParam(value = "sort", required = false) String sort, @RequestParam(value = "tags", required = false) String tags, @RequestParam(value = "pageNo", defaultValue = "1") int pageNo){
 
-        List<Question> questions = questionService.getAllQuestons();
+//        List<Question> questions = questionService.getAllQuestons();
+//        theModel.addAttribute("questions", questions);
+
+        if(sort == null){ sort = "Newest"; }
+        int pageSize = 1;
+        Page<Question> page = questionService.findPaginatedQuestions(pageNo, pageSize, sort);
+
+        List<Question> questions = page.getContent();
+
+        theModel.addAttribute("currentPage", pageNo);
+        theModel.addAttribute("totalPages", page.getTotalPages());
+        theModel.addAttribute("totalItems", page.getTotalElements());
         theModel.addAttribute("questions", questions);
+        theModel.addAttribute("sortField", sort);
 
         return "dashboard";
+
+//        return findPaginatedResult(theModel, 1, sort);
     }
 
     @PostMapping("/ask-question")
@@ -120,9 +134,27 @@ public class QuestionController {
     }
 
     @PostMapping("/accept-answer/{id}")
-    public String acceptAnswer(@PathVariable("id") long answerId,@RequestParam("questionId") long questionId,Model theModel){
-        answerService.acceptAnswer(answerId,questionId);
-        return getQuestion(theModel,questionId,0);
+    public String acceptAnswer(@PathVariable("id") long answerId,@RequestParam("questionId") long questionId,Model theModel) {
+        answerService.acceptAnswer(answerId, questionId);
+        return getQuestion(theModel, questionId, 0);
     }
+
+//    @GetMapping("/page/{pageNo}")
+//    public String findPaginatedResult(Model theModel, @PathVariable (value = "pageNo") int pageNo, @RequestParam(value = "sortField") String sortField){
+//
+//        int pageSize = 1;
+//        Page<Question> page = questionService.findPaginatedQuestions(pageNo, pageSize, sortField);
+//
+//        List<Question> questions = page.getContent();
+//
+//        theModel.addAttribute("currentPage", pageNo);
+//        theModel.addAttribute("totalPages", page.getTotalPages());
+//        theModel.addAttribute("totalItems", page.getTotalElements());
+//        theModel.addAttribute("questions", questions);
+//        theModel.addAttribute("sortField", sortField);
+//
+//        return "dashboard";
+//
+//    }
 
 }
