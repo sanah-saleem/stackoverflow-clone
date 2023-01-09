@@ -115,5 +115,9 @@ public class QuestionServiceImpl implements QuestionService{
         return this.questionRepository.findAll(pageable);
     }
 
+    @Override
+    public List<Question> getSearchRelatedQuestions(String searchKey) {
+        return questionRepository.findAllQuestionsWithSearchKey(searchKey);
+    }
 
 }
