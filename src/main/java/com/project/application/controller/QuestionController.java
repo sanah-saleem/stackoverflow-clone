@@ -139,6 +139,13 @@ public class QuestionController {
         return getQuestion(theModel, questionId, 0);
     }
 
+    @GetMapping("/search")
+    public String searchInQuestions(Model model,@RequestParam("searchKey") String searchKey){
+        List<Question> searchRelatedQuestions=questionService.getSearchRelatedQuestions(searchKey);
+        model.addAttribute("questions",searchRelatedQuestions);
+        return "dashboard";
+    }
+
 //    @GetMapping("/page/{pageNo}")
 //    public String findPaginatedResult(Model theModel, @PathVariable (value = "pageNo") int pageNo, @RequestParam(value = "sortField") String sortField){
 //

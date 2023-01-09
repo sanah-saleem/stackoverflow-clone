@@ -21,4 +21,6 @@ public interface QuestionService {
 
     Page<Question> findPaginatedQuestions(int pageNo, int pageSize, String sortField);
 
+    List<Question> getSearchRelatedQuestions(String searchKey);
+
 }
