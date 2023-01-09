@@ -81,7 +81,7 @@
                 <button type="submit">comment</button>
             </form>
         </div>
-        <div th:unless="showCommentForId == answer.id">
+        <div th:unless="${showCommentForId == answer.id}">
             <form th:action="@{/display-question}">
                 <input type="hidden" name="questionId" th:value="${question.id}">
                 <input type="hidden" name="showCommentForId" th:value="${answer.id}">

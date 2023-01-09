@@ -17,10 +17,10 @@ public interface QuestionService {
 
     void deleteQuestionById(long questionId);
 
-    Set<Question> getSearchedOrFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer);
+    Set<Question> getFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer);
 
     Page<Question> findPaginatedQuestions(int pageNo, int pageSize, String sortField);
 
-    List<Question> getSearchRelatedQuestions(String searchKey);
+    Page<Question> getPaginatedSearchRelatedQuestions(int pageNo, int pageSize, String searchKey);
 
 }

@@ -71,7 +71,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Set<Question> getSearchedOrFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer) {
+    public Set<Question> getFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer) {
 
         Set<Question> resultedQuestions = null;
         if(searchKey != null){
@@ -116,8 +116,10 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public List<Question> getSearchRelatedQuestions(String searchKey) {
-        return questionRepository.findAllQuestionsWithSearchKey(searchKey);
+    public Page<Question> getPaginatedSearchRelatedQuestions(int pageNo, int pageSize, String searchKey) {
+
+        Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+        return questionRepository.findAllQuestionsWithSearchKey(searchKey, pageable);
     }
 
 }
