@@ -17,6 +17,14 @@ public interface QuestionService {
 
     void deleteQuestionById(long questionId);
 
+    void addUpVote(long questionId, String email);
+
+    void removeUpVote(long questionId, String email);
+
+    void addDownVote(long questionId, String email);
+
+    void removeDownVote(long questionId, String email);
+
     Set<Question> getFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer);
 
     Page<Question> findPaginatedQuestions(int pageNo, int pageSize, String filters, String sortField, String tags);

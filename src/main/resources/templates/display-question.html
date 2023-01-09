@@ -78,26 +78,26 @@
 <div th:insert="sidenavbar.html::navbar"></div>
 <div id="content">
     <div th:if="${question.upVotes.contains(author)}">
-        <form th:action="@{/remove-upvote}">
+        <form th:action="@{/remove-upvote}" method="post">
             <input type="hidden" name="questionId" th:value="${question.id}">
             <input type="submit" value="remove-upvote">
         </form>
     </div>
-    <div th:unless="${question.upVotes.contains(author)}">
-        <form th:action="@{/upvote}">
+    <div th:unless="${question.upVotes.contains(author)}" >
+        <form th:action="@{/upvote}" method="post">
             <input type="hidden" name="questionId" th:value="${question.id}">
             <input type="submit" value="upvote">
         </form>
     </div>
     <br><br>
     <div th:if="${question.downVotes.contains(author)}">
-        <form th:action="@{/remove-downvote}">
+        <form th:action="@{/remove-downvote}" method="post">
             <input type="hidden" name="questionId" th:value="${question.id}">
             <input type="submit" value="remove-downvote">
         </form>
     </div>
     <div th:unless="${question.downVotes.contains(author)}">
-        <form th:action="@{/downvote}">
+        <form th:action="@{/downvote}" method="post">
             <input type="hidden" name="questionId" th:value="${question.id}">
             <input type="submit" value="downvote">
         </form>
