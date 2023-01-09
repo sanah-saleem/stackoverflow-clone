@@ -25,6 +25,8 @@
     #content{
         margin-top: 70px;
         margin-left:22%;
+        max-width:50%;
+        min-width:50%;
     }
 
        /* The side navigation menu */
@@ -87,7 +89,7 @@
             <input type="submit" value="upvote">
         </form>
     </div>
-    <br><br><br><br><br>
+    <br><br>
     <div th:if="${question.downVotes.contains(author)}">
         <form th:action="@{/remove-downvote}">
             <input type="hidden" name="questionId" th:value="${question.id}">

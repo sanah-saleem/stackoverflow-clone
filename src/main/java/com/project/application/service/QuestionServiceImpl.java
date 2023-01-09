@@ -11,9 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
@@ -37,7 +35,9 @@ public class QuestionServiceImpl implements QuestionService{
     public void saveQuestion(Question question, String tagName, String email){
 
         System.out.println(tagName);
-        List<String> tagNames = Arrays.asList(tagName.split(","));
+        List<String> allTagNames = Arrays.asList(tagName.split(","));
+        Set<String> uniqueTagNames=new HashSet<>(allTagNames);
+        List<String> tagNames=new ArrayList<>(uniqueTagNames);
         System.out.println(tagNames);
         List<Tag> tags = tagService.saveTag(tagNames);
         System.out.println(tags);

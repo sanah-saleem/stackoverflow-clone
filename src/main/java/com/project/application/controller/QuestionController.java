@@ -41,7 +41,7 @@ public class QuestionController {
 //        if(tags == ""){
 //            System.out.println("tags empty -------------------------------------------------------------------------");
 //        }
-        int pageSize = 1;
+        int pageSize = 10;
         Page<Question> page = questionService.findPaginatedQuestions(pageNo, pageSize, filters, sort, tags);
 
         List<Question> questions = page.getContent();
@@ -73,9 +73,9 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("/display-question/{questionId}")
+    @GetMapping("/display-question")
     public String getQuestion(Model theModel,
-                              @PathVariable("questionId") long questionId,
+                              @RequestParam("questionId") long questionId,
                               @RequestParam(value="showCommentForId", required = false) Integer id){
         if (id==null)
         id=0;
