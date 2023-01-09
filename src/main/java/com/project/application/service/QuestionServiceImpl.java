@@ -67,14 +67,10 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Set<Question> getSearchedOrFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer) {
+    public Set<Question> getFilteredQuestions(String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer) {
 
         Set<Question> resultedQuestions = null;
-        if(searchKey != null){
 
-//           List<Question> resultedQuestionsWithSearchKey = questionRepository.findAllWithSearchKey(searchKey);
-//           resultedQuestions.addAll(questionRepository.findAllQuestionsWithSearchKey(searchKey));
-        }
 
         if(filterByNoAnswer){
 
@@ -87,6 +83,11 @@ public class QuestionServiceImpl implements QuestionService{
 //            resultedQuestions.addAll(questionRepository.findAllQuestionsWithTags(filterByTags));
         }
         return resultedQuestions;
+    }
+
+    @Override
+    public List<Question> getSearchRelatedQuestions(String searchKey) {
+        return questionRepository.findAllQuestionsWithSearchKey(searchKey);
     }
 
 

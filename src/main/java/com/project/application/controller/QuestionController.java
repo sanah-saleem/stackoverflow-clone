@@ -44,6 +44,13 @@ public class QuestionController {
         return "input-question";
     }
 
+    @GetMapping("/search")
+    public String searchInQuestions(Model model,@RequestParam("searchKey") String searchKey){
+        List<Question> searchRelatedQuestions=questionService.getSearchRelatedQuestions(searchKey);
+        model.addAttribute("questions",searchRelatedQuestions);
+        return "dashboard";
+    }
+
     @PostMapping("/post-question")
     public String saveQuestion(@ModelAttribute("question") Question question, @RequestParam("tag") String tags){
 

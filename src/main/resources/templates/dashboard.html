@@ -71,7 +71,9 @@
 <div th:fragment="site-header" id="header">
     <div class="container">
         <h3>stack Overflow</h3>&nbsp&nbsp
-        <input style="height: 30px; margin: 10px;" type="search" th:formaction="@{/search}" name="searchKey" placeholder="Search..">
+        <form th:action="@{/search}" method="get">
+        <input style="height: 30px; margin: 10px;" type="search"  name="searchKey" placeholder="Search..">
+        </form>
         <div sec:authorize="isAnonymous()" style="margin:10px;">
             <form th:action="@{/login}" method="post">
                 <input type="submit" value="Log In">
@@ -108,7 +110,7 @@
                         <div>
                             <h3>Filter By</h3>
                             <input type="checkbox" name="filters" value="NoAnswers" >No_Answers<br>
-                            <input type="checkbox" name="filters" value="NoAccepted Answer" >No_Accepted_Answer<br>
+                            <input type="checkbox" name="filters" value="NoAcceptedAnswer" >No_Accepted_Answer<br>
                             <input type="checkbox" name="filters" value="HasBounty" >Has_Bounty
                         </div>
                         <div>
