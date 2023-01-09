@@ -151,7 +151,7 @@
             </form>
         </div>
 
-        <div th:if="${type == 1}">
+        <div th:if="${from == 1}">
             <div th:if = "${totalPages > 1}">
                 <div>
                     <div>
@@ -159,7 +159,7 @@
                     </div>
                     <div>
                         <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-                            <a th:if="${currentPage != i}" th:href="@{/dashboard/(pageNo = ${i}, sort = ${sortField})}">[[${i}]]</a>
+                            <a th:if="${currentPage != i}" th:href="@{/dashboard/(pageNo = ${i}, filters = ${filters}, sort = ${sortField}, tags = ${tags})}">[[${i}]]</a>
                             <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
                         </span>
                     </div>
@@ -175,7 +175,7 @@
             </div>
         </div>
 
-        <div th:unless="${type == 1}">
+        <div th:unless="${from == 1}">
             <div th:if = "${totalPages > 1}">
                 <div>
                     <div>

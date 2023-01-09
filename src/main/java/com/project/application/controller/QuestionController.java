@@ -30,14 +30,19 @@ public class QuestionController {
 
 
     @GetMapping(value={"/","/dashboard"})
-    public String home(Model theModel, @RequestParam(value = "filters", required = false) String filters, @RequestParam(value = "sort", required = false) String sort, @RequestParam(value = "tags", required = false) String tags, @RequestParam(value = "pageNo", defaultValue = "1") int pageNo){
+    public String home(Model theModel, @RequestParam(value = "filters", required = false) String filters, @RequestParam(value = "sort", defaultValue = "Newest") String sort, @RequestParam(value = "tags", required = false) String tags, @RequestParam(value = "pageNo", defaultValue = "1") int pageNo){
 
 //        List<Question> questions = questionService.getAllQuestons();
 //        theModel.addAttribute("questions", questions);
 
-        if(sort == null){ sort = "Newest"; }
+//        if(tags == null){
+//            System.out.println("tags null -------------------------------------------------------------------------");
+//        }
+//        if(tags == ""){
+//            System.out.println("tags empty -------------------------------------------------------------------------");
+//        }
         int pageSize = 1;
-        Page<Question> page = questionService.findPaginatedQuestions(pageNo, pageSize, sort);
+        Page<Question> page = questionService.findPaginatedQuestions(pageNo, pageSize, filters, sort, tags);
 
         List<Question> questions = page.getContent();
 
@@ -46,6 +51,8 @@ public class QuestionController {
         theModel.addAttribute("totalItems", page.getTotalElements());
         theModel.addAttribute("questions", questions);
         theModel.addAttribute("sortField", sort);
+        theModel.addAttribute("filters", filters);
+        theModel.addAttribute("tags", tags);
         theModel.addAttribute("from", 1);
 
         return "dashboard";
