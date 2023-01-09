@@ -22,14 +22,17 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     //queries for filtering
 
     @Query("SELECT distinct Q from Question Q where Q.hasAcceptedAnswer=false")
-    public List<Question> findAllQuestionsWithNoAcceptedAnswers(Pageable pageable);
+    public Page<Question> findAllQuestionsWithNoAcceptedAnswers(Pageable pageable);
 
-    @Query("select q from Question q where (q.id not in (select distinct q.id from Question q join Answer a ))")
-    public List<Question> findQuestionsWithNoAnswers(@Param("listTags") List<Tag> listTags, Pageable pageable);
+    @Query("select q from Question q where (q.id not in (select distinct q.id from Question q join q.answers a ))")
+    public Page<Question> findQuestionsWithNoAnswers(Pageable pageable);
 
-    @Query("select q from Question q where (q.id not in (select distinct q.id from Question q join Answer a )) and (q.id in (select distinct q.id from Question q join q.tags t where t.name in :listTags))")
-    public List<Question> findQuestionsWithNoAnswersWithTags(@Param("listTags") List<Tag> listTags, Pageable pageable);
+    @Query("select q from Question q where (q.id not in (select distinct q.id from Question q join q.answers a )) and (q.id in (select distinct q.id from Question q join q.tags t where t.name in :listTags))")
+    public Page<Question> findQuestionsWithNoAnswersWithTags(@Param("listTags") List<String> listTags, Pageable pageable);
 
     @Query("SELECT distinct q from Question q where (q.hasAcceptedAnswer=false) and (q.id in (select distinct q.id from Question q join q.tags t where t.name in :listTags))")
-    public List<Question> findQuestionsWithNoAcceptedAnswersWithTags(@Param("listTags") List<Tag> listTags, Pageable pageabl);
+    public Page<Question> findQuestionsWithNoAcceptedAnswersWithTags(@Param("listTags") List<String> listTags, Pageable pageable);
+
+    @Query("select distinct q from Question q join q.tags t where t.name in :listTags")
+    Page<Question> findQuestionsWithTags(@Param("listTags") List<String> listTags, Pageable pageable);
 }

@@ -19,7 +19,7 @@ public interface QuestionService {
 
     Set<Question> getFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer);
 
-    Page<Question> findPaginatedQuestions(int pageNo, int pageSize, String sortField);
+    Page<Question> findPaginatedQuestions(int pageNo, int pageSize, String filters, String sortField, String tags);
 
     Page<Question> getPaginatedSearchRelatedQuestions(int pageNo, int pageSize, String searchKey);
 
