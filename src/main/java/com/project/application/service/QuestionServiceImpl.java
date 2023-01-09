@@ -5,6 +5,10 @@ import com.project.application.domain.Question;
 import com.project.application.domain.Tag;
 import com.project.application.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -87,6 +91,28 @@ public class QuestionServiceImpl implements QuestionService{
 //            resultedQuestions.addAll(questionRepository.findAllQuestionsWithTags(filterByTags));
         }
         return resultedQuestions;
+    }
+
+    @Override
+    public Page<Question> findPaginatedQuestions(int pageNo, int pageSize, String sortField) {
+
+        switch (sortField){
+            case "RecentActivity":
+                sortField = "updatedAt";
+                break;
+            case "HighestScore":
+                sortField = "votes";
+                break;
+            default:
+                sortField = "createdAt";
+
+        }
+
+        Sort sort = Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
+
+
+        return this.questionRepository.findAll(pageable);
     }
 
 
