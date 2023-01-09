@@ -72,7 +72,8 @@
     <div class="container">
         <h3>stack Overflow</h3>&nbsp&nbsp
         <form th:action="@{/search}" method="get">
-        <input style="height: 30px; margin: 10px;" type="search"  name="searchKey" placeholder="Search.."></form>
+        <input style="height: 30px; margin: 10px;" type="search"  name="searchKey" placeholder="Search..">
+        </form>
         <div sec:authorize="isAnonymous()" style="margin:10px;">
             <form th:action="@{/login}" method="post">
                 <input type="submit" value="Log In">
@@ -150,25 +151,50 @@
             </form>
         </div>
 
+        <div th:if="${type == 1}">
+            <div th:if = "${totalPages > 1}">
+                <div>
+                    <div>
+                        Total Rows: [[${totalItems}]]
+                    </div>
+                    <div>
+                        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <a th:if="${currentPage != i}" th:href="@{/dashboard/(pageNo = ${i}, sort = ${sortField})}">[[${i}]]</a>
+                            <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                        </span>
+                    </div>
+                    <div>
+                        <a th:if="${currentPage < totalPages}" th:href="@{/dashboard/(pageNo = ${currentPage + 1}, sort = ${sortField})}">Next</a>
+                        <span th:unless="${currentPage < totalPages}">Next</span>
+                    </div>
+                    <div>
+                        <a th:if="${currentPage < totalPages}" th:href="@{/dashboard/(pageNo = ${totalPages}, sort = ${sortField})}">Last</a>
+                        <span th:unless="${currentPage < totalPages}">Last</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <div th:if = "${totalPages > 1}">
-            <div>
+        <div th:unless="${type == 1}">
+            <div th:if = "${totalPages > 1}">
                 <div>
-                    Total Rows: [[${totalItems}]]
-                </div>
-                <div>
-                    <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-                        <a th:if="${currentPage != i}" th:href="@{/dashboard/(pageNo = ${i}, sort = ${sortField})}">[[${i}]]</a>
-                        <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
-                    </span>
-                </div>
-                <div>
-                    <a th:if="${currentPage < totalPages}" th:href="@{/dashboard/(pageNo = ${currentPage + 1}, sort = ${sortField})}">Next</a>
-                    <span th:unless="${currentPage < totalPages}">Next</span>
-                </div>
-                <div>
-                    <a th:if="${currentPage < totalPages}" th:href="@{/dashboard/(pageNo = ${totalPages}, sort = ${sortField})}">Last</a>
-                    <span th:unless="${currentPage < totalPages}">Last</span>
+                    <div>
+                        Total Rows: [[${totalItems}]]
+                    </div>
+                    <div>
+                        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <a th:if="${currentPage != i}" th:href="@{/search/(pageNo = ${i}, searchKey = ${searchKey})}">[[${i}]]</a>
+                            <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                        </span>
+                    </div>
+                    <div>
+                        <a th:if="${currentPage < totalPages}" th:href="@{/search/(pageNo = ${currentPage + 1}, searchKey = ${searchKey})}">Next</a>
+                        <span th:unless="${currentPage < totalPages}">Next</span>
+                    </div>
+                    <div>
+                        <a th:if="${currentPage < totalPages}" th:href="@{/search/(pageNo = ${totalPages}, searchKey = ${searchKey})}">Last</a>
+                        <span th:unless="${currentPage < totalPages}">Last</span>
+                    </div>
                 </div>
             </div>
         </div>

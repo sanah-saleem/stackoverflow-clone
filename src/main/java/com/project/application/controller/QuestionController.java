@@ -46,6 +46,7 @@ public class QuestionController {
         theModel.addAttribute("totalItems", page.getTotalElements());
         theModel.addAttribute("questions", questions);
         theModel.addAttribute("sortField", sort);
+        theModel.addAttribute("from", 1);
 
         return "dashboard";
 
@@ -140,9 +141,23 @@ public class QuestionController {
     }
 
     @GetMapping("/search")
-    public String searchInQuestions(Model model,@RequestParam("searchKey") String searchKey){
-        List<Question> searchRelatedQuestions=questionService.getSearchRelatedQuestions(searchKey);
-        model.addAttribute("questions",searchRelatedQuestions);
+    public String searchInQuestions(Model theModel,@RequestParam("searchKey") String searchKey, @RequestParam(value = "pageNo", defaultValue = "1") int pageNo){
+//        List<Question> searchRelatedQuestions=questionService.getSearchRelatedQuestions(searchKey);
+//        model.addAttribute("questions",searchRelatedQuestions);
+
+        int pageSize = 1;
+        Page<Question> page = questionService.getPaginatedSearchRelatedQuestions(pageNo, pageSize, searchKey);
+        List<Question> searchedQuestions = page.getContent();
+
+        System.out.println(searchedQuestions.size() + "-------------------------------------------------------------------");
+
+        theModel.addAttribute("currentPage", pageNo);
+        theModel.addAttribute("totalPages", page.getTotalPages());
+        theModel.addAttribute("totalItems", page.getTotalElements());
+        theModel.addAttribute("questions", searchedQuestions);
+        theModel.addAttribute("searchKey", searchKey);
+        theModel.addAttribute("from", 2);
+
         return "dashboard";
     }
 
