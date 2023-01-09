@@ -60,6 +60,26 @@ public class Question {
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinColumn(name="author_id")
 	private Author author;
+
+	@ManyToMany(cascade = {
+			CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH, CascadeType.DETACH})
+	@JoinTable(
+			name = "question_upvote",
+			joinColumns = @JoinColumn(name = "question_id"),
+			inverseJoinColumns = @JoinColumn(name = "Author_id")
+	)
+	List<Author> upVotes;
+
+	@ManyToMany(cascade = {
+			CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.REFRESH, CascadeType.DETACH})
+	@JoinTable(
+			name = "question_downvote",
+			joinColumns = @JoinColumn(name = "question_id"),
+			inverseJoinColumns = @JoinColumn(name = "Author_id")
+	)
+	List<Author> downVotes;
 	
 	public void addAnswer(Answer answer) {
         if (answers == null) {
@@ -73,7 +93,29 @@ public class Question {
 			answers.remove(answer);
 		}
 	}
-	
+
+	public void addUpVote(Author author) {
+		if (upVotes == null) {
+			upVotes = new ArrayList<>();
+		}
+		upVotes.add(author);
+	}
+
+	public void removeUpVote(Author author) {
+		upVotes.remove(author);
+	}
+
+	public void addDownVote(Author author) {
+		if (downVotes == null) {
+			downVotes = new ArrayList<>();
+		}
+		downVotes.add(author);
+	}
+
+	public void removeDownVote(Author author) {
+		downVotes.remove(author);
+	}
+
 	public void addTag(Tag tag) {
 		if(tags == null) {
 			tags = new ArrayList<>();

@@ -46,7 +46,6 @@ public class QuestionServiceImpl implements QuestionService{
         author.addQuestion(question);
         questionRepository.save(question);
 
-
         System.out.println(author.getEmail());
     }
 
@@ -70,6 +69,37 @@ public class QuestionServiceImpl implements QuestionService{
         questionRepository.deleteById(questionId);
     }
 
+    public void addUpVote(long questionId, String email) {
+        Question theQuestion = getQuestionById(questionId);
+        Author currentAuthor = authorService.findByEmail(email);
+        if(theQuestion.getDownVotes().contains(currentAuthor)) {
+            removeDownVote(questionId, email);
+        }
+        theQuestion.addUpVote(currentAuthor);
+    }
+
+    public void removeUpVote(long questionId, String email) {
+        Question theQuestion = getQuestionById(questionId);
+        Author currentAuthor = authorService.findByEmail(email);
+        theQuestion.removeUpVote(currentAuthor);
+    }
+
+    public void addDownVote(long questionId, String email) {
+        Question theQuestion = getQuestionById(questionId);
+        Author currentAuthor = authorService.findByEmail(email);
+        if(theQuestion.getUpVotes().contains(currentAuthor)) {
+            removeUpVote(questionId, email);
+        }
+        theQuestion.addDownVote(currentAuthor);
+    }
+
+    public void removeDownVote(long questionId, String email) {
+        Question theQuestion = getQuestionById(questionId);
+        Author currentAuthor = authorService.findByEmail(email);
+        theQuestion.removeDownVote(currentAuthor);
+    }
+
+    //not needed
     @Override
     public Set<Question> getFilteredQuestions(String searchKey, String filterByTags, boolean filterByNoAnswer, boolean noAcceptedAnswer) {
 
