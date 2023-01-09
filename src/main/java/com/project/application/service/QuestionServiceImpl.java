@@ -69,6 +69,7 @@ public class QuestionServiceImpl implements QuestionService{
         questionRepository.deleteById(questionId);
     }
 
+    @Override
     public void addUpVote(long questionId, String email) {
         Question theQuestion = getQuestionById(questionId);
         Author currentAuthor = authorService.findByEmail(email);
@@ -78,12 +79,14 @@ public class QuestionServiceImpl implements QuestionService{
         theQuestion.addUpVote(currentAuthor);
     }
 
+    @Override
     public void removeUpVote(long questionId, String email) {
         Question theQuestion = getQuestionById(questionId);
         Author currentAuthor = authorService.findByEmail(email);
         theQuestion.removeUpVote(currentAuthor);
     }
 
+    @Override
     public void addDownVote(long questionId, String email) {
         Question theQuestion = getQuestionById(questionId);
         Author currentAuthor = authorService.findByEmail(email);
@@ -93,6 +96,7 @@ public class QuestionServiceImpl implements QuestionService{
         theQuestion.addDownVote(currentAuthor);
     }
 
+    @Override
     public void removeDownVote(long questionId, String email) {
         Question theQuestion = getQuestionById(questionId);
         Author currentAuthor = authorService.findByEmail(email);

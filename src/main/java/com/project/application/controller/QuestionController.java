@@ -3,7 +3,9 @@ package com.project.application.controller;
 import com.project.application.domain.Answer;
 import com.project.application.domain.Comment;
 import com.project.application.domain.Question;
+import com.project.application.repository.AuthorRepository;
 import com.project.application.service.AnswerService;
+import com.project.application.service.AuthorService;
 import com.project.application.service.QuestionService;
 import com.project.application.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class QuestionController {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    private AuthorService authorService;
 
 
     @GetMapping(value={"/","/dashboard"})
@@ -85,6 +90,7 @@ public class QuestionController {
         theModel.addAttribute("newAnswer", new Answer());
         theModel.addAttribute("newComment", new Comment());
         theModel.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
+        theModel.addAttribute("author", authorService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
         return "display-question";
     }
 
@@ -185,5 +191,61 @@ public class QuestionController {
 //        return "dashboard";
 //
 //    }
+
+    @PostMapping("/upvote")
+    public String upvote(@RequestParam("questionId") long questionId, Principal principal, Model theModel) {
+        questionService.addUpVote(questionId, principal.getName());
+
+        Question question = questionService.getQuestionById(questionId);
+        theModel.addAttribute("question", question);
+        theModel.addAttribute("showCommentForId", 0);
+        theModel.addAttribute("newAnswer", new Answer());
+        theModel.addAttribute("newComment", new Comment());
+        theModel.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
+        theModel.addAttribute("author", authorService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return "display-question";
+    }
+
+    @PostMapping("/remove-upvote")
+    public String removeUpvote(@RequestParam("questionId") long questionId, Principal principal, Model theModel) {
+        questionService.removeUpVote(questionId, principal.getName());
+
+        Question question = questionService.getQuestionById(questionId);
+        theModel.addAttribute("question", question);
+        theModel.addAttribute("showCommentForId", 0);
+        theModel.addAttribute("newAnswer", new Answer());
+        theModel.addAttribute("newComment", new Comment());
+        theModel.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
+        theModel.addAttribute("author", authorService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return "display-question";
+    }
+
+    @PostMapping("/downvote")
+    public String downvote(@RequestParam("questionId") long questionId, Principal principal, Model theModel) {
+        questionService.addDownVote(questionId, principal.getName());
+
+        Question question = questionService.getQuestionById(questionId);
+        theModel.addAttribute("question", question);
+        theModel.addAttribute("showCommentForId", 0);
+        theModel.addAttribute("newAnswer", new Answer());
+        theModel.addAttribute("newComment", new Comment());
+        theModel.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
+        theModel.addAttribute("author", authorService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return "display-question";
+    }
+
+    @PostMapping("/remove-downvote")
+    public String removeDownvote(@RequestParam("questionId") long questionId, Principal principal, Model theModel) {
+        questionService.removeDownVote(questionId, principal.getName());
+
+        Question question = questionService.getQuestionById(questionId);
+        theModel.addAttribute("question", question);
+        theModel.addAttribute("showCommentForId", 0);
+        theModel.addAttribute("newAnswer", new Answer());
+        theModel.addAttribute("newComment", new Comment());
+        theModel.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
+        theModel.addAttribute("author", authorService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+        return "display-question";
+    }
 
 }
