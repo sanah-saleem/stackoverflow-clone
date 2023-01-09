@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-                 xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>dashboard</title>
     <style>
       body{
       background-color:#FAF8F1;
-
+      margin:0px;
       }
       #header .container{
         border: 1px solid black;
         display: flex;
         position: fixed;
-        top: 5px;
+        background-color:#FAF8F1;
+        top:0px;
         justify-content: space-around;
         width: 100%;
         align-items: center;
@@ -24,11 +25,12 @@
         margin: 10px 0px;
     }
       .div{
-      min-width:45%;
+      min-width:50%;
       display:inline-block;
       border-left-style: single;
       border-left-width:3px;
       border-color:black;
+      margin-left:20%;
       }
 
 
@@ -65,6 +67,52 @@
         padding: 3px;
       }
 
+
+
+
+
+
+
+   /* The side navigation menu */
+    .sidebar {
+
+        padding: 0;
+        width: 20%;
+        background-color:#FAF8F1;
+        position: fixed;
+        top:7%;
+        height: 100%;
+        overflow: auto;
+        border-right:1px solid grey;
+        text-align:center;
+    }
+
+    /* Sidebar links */
+    .sidebar a {
+        display: block;
+        color: black;
+        padding: 16px;
+        text-decoration: none;
+    }
+
+    /* Active/current link */
+    .sidebar a.active {
+        background-color: #04AA6D;
+        color: white;
+    }
+
+    /* Links on mouse-over */
+    .sidebar a:hover:not(.active) {
+        background-color: #555;
+        color: white;
+    }
+
+    /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+    div.content {
+        margin-left: 200px;
+        padding: 1px 16px;
+        height: 1000px;
+    }
     </style>
 </head>
 <body>
@@ -72,7 +120,7 @@
     <div class="container">
         <h3>stack Overflow</h3>&nbsp&nbsp
         <form th:action="@{/search}" method="get">
-        <input style="height: 30px; margin: 10px;" type="search"  name="searchKey" placeholder="Search..">
+            <input style="height: 30px; margin: 10px;" type="search"  name="searchKey" placeholder="Search..">
         </form>
         <div sec:authorize="isAnonymous()" style="margin:10px;">
             <form th:action="@{/login}" method="post">
@@ -87,9 +135,17 @@
     </div>
 </div><br><br>
 <div id="content">
-    <div style="min-width:25%;display:inline-block;"></div>
+    <!--    <div style="min-width:20%;display:inline-block;position:fixed;top:7%;left:0px;height:100%;text-align:center;padding-top:3%;border-right:1px solid grey">-->
+    <!--        <div>question</div>-->
+    <!--        <br><br><br><br>-->
+    <!--        <div >user</div>-->
+    <!--        <br><br><br><br>-->
+    <!--        <div >Tags</div>-->
+    <!--    </div>-->
+    <div th:insert="sidenavbar.html::navbar"></div>
     <div class="div">
-        <h3 style="display:inline-block;">ALL QUESTIONS</h3>
+
+        <h3 style="display:inline-block;padding-left:2%">ALL QUESTIONS</h3>
         <form style="display:inline-block;padding-left:40%;" th:action="@{/ask-question}" method="post">
             <button class=button;type="submit">Ask Question</button>
         </form>
@@ -138,17 +194,10 @@
         </div>
         <br><br>
         <div th:each="question : ${questions}">
-            <form th:action="@{/display-question}">
-                <input type="hidden" name="questionId" th:value="${question.id}">
-                <button id="button" type="submit">
-                    <div>
-                        <h2 th:text=${question.title}></h2>
-                        <p th:text=${question.problem}></p>
-                    </div>
-                </button>
-                <br>
-                <br>
-            </form>
+            <div style="border:1px solid grey;padding:5%">
+                <a th:href="@{/display-question/{questionId}(questionId=${question.id})}" th:text=${question.title}></a>
+                <p th:text=${question.problem}></p>
+            </div>
         </div>
 
         <div th:if="${from == 1}">
@@ -159,16 +208,16 @@
                     </div>
                     <div>
                         <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-                            <a th:if="${currentPage != i}" th:href="@{/dashboard/(pageNo = ${i}, filters = ${filters}, sort = ${sortField}, tags = ${tags})}">[[${i}]]</a>
+                            <a th:if="${currentPage != i}" th:href="@{/dashboard/(filters = ${filters}, sort = ${sortField}, tags = ${tags}, pageNo = ${i})}">[[${i}]]</a>
                             <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
                         </span>
                     </div>
                     <div>
-                        <a th:if="${currentPage < totalPages}" th:href="@{/dashboard/(pageNo = ${currentPage + 1}, sort = ${sortField})}">Next</a>
+                        <a th:if="${currentPage < totalPages}" th:href="@{/dashboard/(filters = ${filters}, sort = ${sortField}, tags = ${tags}, pageNo = ${i})}">Next</a>
                         <span th:unless="${currentPage < totalPages}">Next</span>
                     </div>
                     <div>
-                        <a th:if="${currentPage < totalPages}" th:href="@{/dashboard/(pageNo = ${totalPages}, sort = ${sortField})}">Last</a>
+                        <a th:if="${currentPage < totalPages}" th:href="@{/dashboard/(filters = ${filters}, sort = ${sortField}, tags = ${tags}, pageNo = ${i})}">Last</a>
                         <span th:unless="${currentPage < totalPages}">Last</span>
                     </div>
                 </div>

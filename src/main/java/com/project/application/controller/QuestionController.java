@@ -73,9 +73,9 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("/display-question")
+    @GetMapping("/display-question/{questionId}")
     public String getQuestion(Model theModel,
-                              @RequestParam("questionId") long questionId,
+                              @PathVariable("questionId") long questionId,
                               @RequestParam(value="showCommentForId", required = false) Integer id){
         if (id==null)
         id=0;
