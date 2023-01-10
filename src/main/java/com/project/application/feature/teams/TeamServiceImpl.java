@@ -32,7 +32,7 @@ public class TeamServiceImpl implements TeamService{
         if(author==null){
             return team;
         }
-        if(team.members.contains(author)){
+        if(team.getMembers().contains(author)){
             return team;
         }
         team.addMember(author);
@@ -48,7 +48,7 @@ public class TeamServiceImpl implements TeamService{
         if(author==null){
             return team;
         }
-        if(!team.members.contains(author)){
+        if(!team.getMembers().contains(author)){
             return team;
         }
         team.removeMember(author);
