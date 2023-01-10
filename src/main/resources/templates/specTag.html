@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+WatchTag
+
+    <div th:if="${state}" name="state">
+        <button type="submit" th:formaction="@{/addWatchList}" name="watchTag" th:value="${tag.name}">Watch</button>
+    </div>
+    <div th:unless="${state}" name="state">
+        <button type="submit" th:formaction="@{/addWatchList}" name="watchTag" th:value="${tag.name}">Unwatch</button>
+    </div>
+
+<!--Displayquestions-->
+    <h1><span th:text="${tag.name}"></span></h1><br>
+    <div class="tagquestions">
+        <div th:each="question:${Questions}">
+            <span th:text="${question.problem}"></span><br><br>
+<!--            <span th:each="answer:$question.answers">-->
+<!--                <span th:text="${answer.content}"></span>-->
+<!--            </span>-->
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>

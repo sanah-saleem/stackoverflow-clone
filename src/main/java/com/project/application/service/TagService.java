@@ -13,4 +13,11 @@ public interface TagService {
     List<Tag> getAllTags();
 
     public boolean checkTag(String tagName);
+
+    List<Tag> searchTagByname(String theSearchName);
+
+    List<Tag> sortTags(String sortValue);
+
+    Tag findTagByName(String tagname);
 }
+

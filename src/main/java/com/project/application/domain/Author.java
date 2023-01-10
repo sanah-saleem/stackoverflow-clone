@@ -31,6 +31,10 @@ public class Author {
     @Column(name="role")
     private String authorRole = "ROLE_USER";
 
+    public List<Tag> getTagsWatched() {
+        return tagsWatched;
+    }
+
     @ManyToMany(targetEntity=Tag.class, fetch=FetchType.EAGER, cascade =
             {CascadeType.DETACH,
                     CascadeType.MERGE,

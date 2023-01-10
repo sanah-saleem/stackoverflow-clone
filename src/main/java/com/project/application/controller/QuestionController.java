@@ -1,13 +1,8 @@
 package com.project.application.controller;
 
-import com.project.application.domain.Answer;
-import com.project.application.domain.Comment;
-import com.project.application.domain.Question;
+import com.project.application.domain.*;
 import com.project.application.repository.AuthorRepository;
-import com.project.application.service.AnswerService;
-import com.project.application.service.AuthorService;
-import com.project.application.service.QuestionService;
-import com.project.application.service.CommentService;
+import com.project.application.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.HTML;
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class QuestionController {
@@ -32,6 +29,9 @@ public class QuestionController {
 
     @Autowired
     private AuthorService authorService;
+
+    @Autowired
+    private TagService tagService;
 
 
     @GetMapping(value={"/","/dashboard"})
@@ -248,4 +248,74 @@ public class QuestionController {
         return "display-question";
     }
 
+    @GetMapping("/viewTags")
+    public String viewTags(Model theModel){
+
+        List<Tag> tags = tagService.getAllTags();
+        theModel.addAttribute("TagList", tags);
+        return "tags";
+    }
+
+    @GetMapping("/searchTags")
+    public String searchTags(Model theModel, @RequestParam("theSearchName")String theSearchName){
+        System.out.println(theSearchName);
+        List<Tag> tags= tagService.searchTagByname(theSearchName);
+        System.out.println(tags);
+        theModel.addAttribute("TagList", tags);
+        return "tags";
+    }
+
+
+    @GetMapping("/sortTags")
+    public String sortTags(Model theModel, @RequestParam("sortValue")String sortValue){
+
+        List<Tag> tags= tagService.sortTags(sortValue);
+        System.out.println("In controller after sort");
+        for (Tag tagitem:tags) {
+            System.out.println(tagitem.getName());
+        }
+        System.out.println(tags);
+        theModel.addAttribute("TagList", tags);
+        return "tags";
+    }
+
+    @GetMapping("/users")
+    public String viewAuthors(Model theModel){
+        List<Author> users = authorService.getAuthors();
+        theModel.addAttribute("Users", users);
+        return "users";
+    }
+//
+    @PostMapping("/addWatchList")
+    public String addWatchList(@RequestParam("watchTag") String tagName,Principal principal, Model theModel)
+    {
+        Tag watchTag = tagService.findTagByName(tagName);
+        Author author= authorService.findByEmail(principal.getName());
+        List<Tag> tagswatched=authorService.addTagWatched(principal.getName(),watchTag);
+        Set<Question> questions= watchTag.getQuestions();
+        Boolean state = author.getTagsWatched().contains(watchTag);
+        theModel.addAttribute("state",state);
+        theModel.addAttribute("author",author);
+        theModel.addAttribute("tag",watchTag);
+        theModel.addAttribute("Questions",questions);
+        return "specTag";
+    }
+
+    @GetMapping("/question-tagged")
+    public String questionTagged(@RequestParam("tagname") String tagname,Model theModel){
+        System.out.println("In controller"+tagname);
+        Tag qtag= tagService.findTagByName(tagname);
+        Set<Question> questions= qtag.getQuestions();
+//        List<Answer> answers = questions.
+        theModel.addAttribute("tag",qtag);
+        theModel.addAttribute("Questions",questions);
+        return "specTag";
+    }
+
+//    @GetMapping("/displayUser")
+//    public String displayUser(Model theModel,@RequestParam("name")String name){
+//        Author user= authorService.findAuthor
+//        theModel.addAttribute("Users", users);
+//        return "users";
+//    }
 }

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+
+<style>
+    .tagbody {
+        background-color: grey;
+        height: 2000px;
+        margin-left: 205px;
+        margin-right: 1px;
+        color: white;
+    }
+
+    .aaa .element1 {
+        float: left;
+        margin-left: 5%;
+    }
+
+    .aaa .element2 {
+        float: right;
+        margin-right: 5%;
+    }
+
+    .tags {
+
+        padding: 3.75%;
+        display: grid;
+        grid-template-columns: 100%;
+        grid-column-gap: 0;
+        grid-row-gap: 20px;
+
+    }
+
+    .tags .container {
+
+        padding: 100px;
+        background-color: azure;
+        border: 1px solid black;
+        color: black
+    }
+
+    @media only screen and (min-width: 640px) {
+        .tags {
+            grid-template-columns: repeat(3, 1fr);
+            ;
+            grid-column-gap: 5%;
+            grid-row-gap: 40px;
+        }
+
+        .tags .container {
+            padding: 20px;
+        }
+    }
+
+    @media only screen and (min-width: 981px) {
+        .tags {
+            grid-template-columns: repeat(4, 1fr);
+            grid-row-gap: 50px;
+        }
+
+        .tags .container {
+            padding: 30px;
+        }
+    }
+
+    .watchbutton {
+        float: right;
+        width: inherit;
+        padding: 4px;
+        margin-right: 5px;
+    }
+
+    #button {
+        background-color: white;
+        border: single;
+        width: 50%;
+        word-wrap: break-word;
+        padding: 4px;
+        font-size: 16px;
+        /* margin: 4px 2px; */
+        cursor: pointer;
+        float: left;
+    }
+
+    /* The side navigation menu */
+    .sidebar {
+        margin-top: 0;
+        padding: 0;
+        width: 200px;
+        background-color: #f1f1f1;
+        position: fixed;
+        height: 100%;
+        overflow: auto;
+    }
+
+    /* Sidebar links */
+    .sidebar a {
+        display: block;
+        color: black;
+        padding: 16px;
+        text-decoration: none;
+    }
+
+    /* Active/current link */
+    .sidebar a.active {
+        background-color: #04AA6D;
+        color: white;
+    }
+
+    /* Links on mouse-over */
+    .sidebar a:hover:not(.active) {
+        background-color: #555;
+        color: white;
+    }
+
+    /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+    div.content {
+        margin-left: 200px;
+        padding: 1px 16px;
+        height: 1000px;
+    }
+</style>
+
+<body>
+    <div class="sidebar">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/viewTags}">Tags</a>
+        <a th:href="@{/users}">Users</a>
+    </div>
+    <div class="tagbody">
+        <h1 style="margin-left: 5%; margin-right: 5%; padding-top: 15px;">Tags</h1>
+        <p style="margin-left: 5%; margin-right: 5%;">
+            A tag is a keyword or label that categorizes your question with other, similar questions. Using the right
+            tags
+            makes it easier for others to find and answer your question.
+        </p>
+        <br><br>
+        <!--Search-->
+        <div class="aaa">
+            <form class="element1" th:action="@{/searchTags}">
+                <span>
+                    <input type="text" name="theSearchName" />
+                    <input style="cursor: pointer" type="submit" value="Search" />
+                </span>
+            </form>
+            <!--Sort-->
+            <form class="element2" th:action="@{/sortTags}" >
+                <div >
+                    <button style="cursor: pointer" type="submit" name="sortValue" value="name">Name</button>
+                    <button style="cursor: pointer" type="submit" name="sortValue" value="createdAt">New</button>
+                </div>
+            </form>
+        </div>
+        <br><br>
+        <!--Tags-->
+        <div class="tags">
+            <div th:each="tag:${TagList}" >
+                <div class="container">
+                    <form th:action="@{/question-tagged}">
+                        <button id="button" type="submit" name="tagname" th:value="${tag.name}" th:text="${tag.name}" ></button>
+                    </form>
+                    <br>
+                        <td th:text="${ tag.createdAt}"></td><br>
+                        <td th:text="${ tag.name}">createdAt</td>
+                    <p class="item description"></p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
