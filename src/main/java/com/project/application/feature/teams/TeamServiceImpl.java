@@ -1,13 +1,16 @@
 package com.project.application.feature.teams;
 
 import com.project.application.domain.Author;
+import com.project.application.domain.Tag;
 import com.project.application.domain.TeamQuestion;
 import com.project.application.feature.teams.repository.TeamQuestionRepository;
 import com.project.application.feature.teams.repository.TeamRepository;
 import com.project.application.service.AuthorService;
+import com.project.application.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -16,6 +19,9 @@ public class TeamServiceImpl implements TeamService{
     TeamRepository teamRepository;
     @Autowired
     AuthorService authorService;
+
+    @Autowired
+    TagService tagService;
 
     @Autowired
     TeamQuestionRepository teamQuestionRepository;
@@ -87,7 +93,9 @@ public class TeamServiceImpl implements TeamService{
     // ----- Team Question service methods -----
 
     @Override
-    public void saveTeamQuestion(long teamId, TeamQuestion teamQuestion) {
+    public void saveTeamQuestion(long teamId, TeamQuestion teamQuestion, String tagNames) {
+        List<Tag> tags = tagService.saveTag(Arrays.asList(tagNames.split(",")));
+        teamQuestion.setTags(tags);
         getTeamById(teamId).addQuestion(teamQuestion);
         teamQuestionRepository.save(teamQuestion);
     }
