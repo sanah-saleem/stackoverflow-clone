@@ -37,6 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/ask-question/**", "/save-answer/**", "/save-comment/**")
                 .hasAnyRole("ADMIN","USER")
+                .antMatchers("/upvote","/remove-upvote","/downvote","/remove-downvote")
+                .hasAnyRole("ADMIN","USER")
                 .and()
                 .httpBasic()
                 .and()
