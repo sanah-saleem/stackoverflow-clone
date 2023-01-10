@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class AuthorServiceImplementation implements AuthorService{
     @Autowired
     AuthorRepository authorRepository;
@@ -35,7 +37,8 @@ public class AuthorServiceImplementation implements AuthorService{
     }
 
     @Override
-    public List<Tag> addTagWatched(String email, Tag watchTag) {
+//    public List<Tag> addTagWatched(String email, Tag watchTag) {
+    public void addTagWatched(String email, Tag watchTag) {
         Author user = authorRepository.findByEmail(email);
         List<Tag> tags = user.getTagsWatched();
         if(tags.contains(watchTag)){
@@ -44,6 +47,6 @@ public class AuthorServiceImplementation implements AuthorService{
         else{
             tags.add(watchTag);
         }
-        return tags;
+        authorRepository.save(user);
     }
 }

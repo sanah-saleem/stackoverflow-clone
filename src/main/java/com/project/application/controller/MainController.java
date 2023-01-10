@@ -1,22 +1,21 @@
 package com.project.application.controller;
 
 import com.project.application.domain.*;
-import com.project.application.repository.AuthorRepository;
 import com.project.application.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.HTML;
 import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
 @Controller
-public class QuestionController {
+public class MainController {
 
     @Autowired
     QuestionService questionService;
@@ -35,22 +34,36 @@ public class QuestionController {
 
 
     @GetMapping(value={"/","/dashboard"})
-    public String home(Model theModel, @RequestParam(value = "filters", required = false) String filters, @RequestParam(value = "sort", defaultValue = "Newest") String sort, @RequestParam(value = "tags", required = false) String tags, @RequestParam(value = "pageNo", defaultValue = "1") int pageNo){
+    public String home(Model theModel,
+                       @RequestParam(value = "state", defaultValue = "false") boolean state,
+                       @RequestParam(value = "filters", required = false) String filters,
+                       @RequestParam(value = "sort", defaultValue = "Newest") String sort,
+                       @RequestParam(value = "tags", required = false) String tags,
+                       @RequestParam(value = "tagMode", defaultValue = "") String tagMode,
+                       @RequestParam(value = "pageNo", defaultValue = "1") int pageNo){
 
-//        List<Question> questions = questionService.getAllQuestons();
-//        theModel.addAttribute("questions", questions);
 
-//        if(tags == null){
-//            System.out.println("tags null -------------------------------------------------------------------------");
-//        }
-//        if(tags == ""){
-//            System.out.println("tags empty -------------------------------------------------------------------------");
-//        }
         int pageSize = 10;
-        Page<Question> page = questionService.findPaginatedQuestions(pageNo, pageSize, filters, sort, tags);
+        Page<Question> page = questionService.findPaginatedQuestions(pageNo, pageSize, filters, sort, tags, tagMode);
 
         List<Question> questions = page.getContent();
 
+        if(tagMode.equals("Watched")){
+            theModel.addAttribute("isFilteredByWatchTags", true);
+        }
+        else {
+            theModel.addAttribute("isFilteredByWatchTags", false);
+        }
+
+        if(tags == null || tags == ""){
+            theModel.addAttribute("isFilteredByTags", false);
+        }
+        else {
+            theModel.addAttribute("isFilteredByTags", true);
+//            Author author = authorService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+//            state = author.getTagsWatched().contains(tags);
+        }
+        theModel.addAttribute("state", state);
         theModel.addAttribute("currentPage", pageNo);
         theModel.addAttribute("totalPages", page.getTotalPages());
         theModel.addAttribute("totalItems", page.getTotalElements());
@@ -62,7 +75,6 @@ public class QuestionController {
 
         return "dashboard";
 
-//        return findPaginatedResult(theModel, 1, sort);
     }
 
     @PostMapping("/ask-question")
@@ -155,8 +167,6 @@ public class QuestionController {
 
     @GetMapping("/search")
     public String searchInQuestions(Model theModel,@RequestParam("searchKey") String searchKey, @RequestParam(value = "pageNo", defaultValue = "1") int pageNo){
-//        List<Question> searchRelatedQuestions=questionService.getSearchRelatedQuestions(searchKey);
-//        model.addAttribute("questions",searchRelatedQuestions);
 
         int pageSize = 1;
         Page<Question> page = questionService.getPaginatedSearchRelatedQuestions(pageNo, pageSize, searchKey);
@@ -174,26 +184,10 @@ public class QuestionController {
         return "dashboard";
     }
 
-//    @GetMapping("/page/{pageNo}")
-//    public String findPaginatedResult(Model theModel, @PathVariable (value = "pageNo") int pageNo, @RequestParam(value = "sortField") String sortField){
-//
-//        int pageSize = 1;
-//        Page<Question> page = questionService.findPaginatedQuestions(pageNo, pageSize, sortField);
-//
-//        List<Question> questions = page.getContent();
-//
-//        theModel.addAttribute("currentPage", pageNo);
-//        theModel.addAttribute("totalPages", page.getTotalPages());
-//        theModel.addAttribute("totalItems", page.getTotalElements());
-//        theModel.addAttribute("questions", questions);
-//        theModel.addAttribute("sortField", sortField);
-//
-//        return "dashboard";
-//
-//    }
 
     @PostMapping("/upvote")
     public String upvote(@RequestParam("questionId") long questionId, Principal principal, Model theModel) {
+
         questionService.addUpVote(questionId, principal.getName());
 
         Question question = questionService.getQuestionById(questionId);
@@ -291,31 +285,28 @@ public class QuestionController {
     {
         Tag watchTag = tagService.findTagByName(tagName);
         Author author= authorService.findByEmail(principal.getName());
-        List<Tag> tagswatched=authorService.addTagWatched(principal.getName(),watchTag);
-        Set<Question> questions= watchTag.getQuestions();
+//        List<Tag> tagswatched=authorService.addTagWatched(principal.getName(),watchTag);
+        authorService.addTagWatched(principal.getName(),watchTag);
+//        Set<Question> questions= watchTag.getQuestions();
         Boolean state = author.getTagsWatched().contains(watchTag);
         theModel.addAttribute("state",state);
-        theModel.addAttribute("author",author);
-        theModel.addAttribute("tag",watchTag);
-        theModel.addAttribute("Questions",questions);
-        return "specTag";
+        theModel.addAttribute("tags", tagName);
+//        theModel.addAttribute("author",author);
+//        theModel.addAttribute("tag",watchTag);
+//        theModel.addAttribute("Questions",questions);
+        return "redirect:/dashboard?state=" + state + "&tags=" + tagName;
     }
 
-    @GetMapping("/question-tagged")
-    public String questionTagged(@RequestParam("tagname") String tagname,Model theModel){
-        System.out.println("In controller"+tagname);
-        Tag qtag= tagService.findTagByName(tagname);
-        Set<Question> questions= qtag.getQuestions();
-//        List<Answer> answers = questions.
-        theModel.addAttribute("tag",qtag);
-        theModel.addAttribute("Questions",questions);
-        return "specTag";
-    }
-
-//    @GetMapping("/displayUser")
-//    public String displayUser(Model theModel,@RequestParam("name")String name){
-//        Author user= authorService.findAuthor
-//        theModel.addAttribute("Users", users);
-//        return "users";
+//    @GetMapping("/question-tagged")
+//    public String questionTagged(@RequestParam("tagname") String tagname,Model theModel){
+//
+//        Tag qtag= tagService.findTagByName(tagname);
+////        Set<Question> questions= qtag.getQuestions();
+//        theModel.addAttribute("tag",qtag);
+////        theModel.addAttribute("Questions",questions);
+//
+//        System.out.println("In controller"+tagname + "--------------------------------------------------------------------");
+//        return "specTag";
 //    }
+
 }

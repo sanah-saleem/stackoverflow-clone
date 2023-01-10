@@ -13,5 +13,6 @@ public interface AuthorService {
 
     List<Author> getAuthors();
 
-    List<Tag> addTagWatched(String name, Tag watchTag);
+//    List<Tag> addTagWatched(String name, Tag watchTag);
+    void addTagWatched(String name, Tag watchTag);
 }

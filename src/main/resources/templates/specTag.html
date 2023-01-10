@@ -17,11 +17,12 @@ WatchTag
 <!--Displayquestions-->
     <h1><span th:text="${tag.name}"></span></h1><br>
     <div class="tagquestions">
-        <div th:each="question:${Questions}">
-            <span th:text="${question.problem}"></span><br><br>
-<!--            <span th:each="answer:$question.answers">-->
-<!--                <span th:text="${answer.content}"></span>-->
-<!--            </span>-->
+        <div th:each="question:${tag.questions}">
+            <span th:text = "${question.title}"></span>
+
+            <span th:each="tag : ${question.tags}">
+                <button style="background-color:#EAFDFC; border-radius:25%; font-size: 75%;">[[${tag.name}]]</button>&nbsp
+            </span>
         </div>
     </div>
     </div>

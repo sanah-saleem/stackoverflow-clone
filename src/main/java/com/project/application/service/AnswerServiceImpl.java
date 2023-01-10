@@ -8,8 +8,10 @@ import com.project.application.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 @Service
+@Transactional
 public class AnswerServiceImpl implements AnswerService{
     @Autowired
     private AnswerRepository answerRepository;
@@ -33,6 +35,7 @@ public class AnswerServiceImpl implements AnswerService{
         author.addAnswer(answer);
 
         answerRepository.save(answer);
+
 
     }
 

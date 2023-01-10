@@ -8,19 +8,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
-public interface
-QuestionRepository extends JpaRepository<Question, Long> {
-    @Query("SELECT distinct Q from Question Q join Q.tags T where (Q.title like %:search%) or (Q.problem like %:search%) or (T.name like %:search%)")
+
+@Transactional
+public interface QuestionRepository extends JpaRepository<Question, Long> {
+
+    @Query("SELECT distinct Q from Question Q join Q.tags T where (Q.title like %:search%) or (Q.author.name like %:search%) or (T.name like %:search%)")
     public Page<Question> findAllQuestionsWithSearchKey(@Param("search") String searchKey, Pageable pageable);
 
-
-
-//@Query("SELECT distinct Q from Question Q where (Q.id NOT IN :questionIdsWithAcceptedAnswers)")
-//    public List<Question> findAllQuestionWithNoAcceptedAnswers(@Param("questionIdsWithAcceptedAnswers") List<Long> questionIdsWithAcceptedAnswers);
-
-    //queries for filtering
 
     @Query("SELECT distinct Q from Question Q where Q.hasAcceptedAnswer=false")
     public Page<Question> findAllQuestionsWithNoAcceptedAnswers(Pageable pageable);
@@ -36,4 +33,5 @@ QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query("select distinct q from Question q join q.tags t where t.name in :listTags")
     Page<Question> findQuestionsWithTags(@Param("listTags") List<String> listTags, Pageable pageable);
+
 }
