@@ -76,7 +76,7 @@
         <br>
         <br>
         <form style="margin-left:" th:action="@{/ask-team-question}" method="post">
-            <input type="hidden" name="teamId" th:value="team.id">
+            <input type="hidden" name="teamId" th:value="${team.id}">
             <input type="submit" value="AskQuestion">
         </form>
 
@@ -84,7 +84,6 @@
 <div th:each="question : ${team.teamQuestions}">
   <div style="border:1px solid grey;padding-top:3%;padding-bottom:3%;min-width:50%,max-width:50%;">
     <a style="font-size:100%;text-decoration:none;" th:href="@{/display-question(questionId=${question.id})}" th:text=${question.title}></a>
-    <p style="font-size:80%;"th:text=${question.problem}></p>
   </div>
 </div>
 </div>
