@@ -1,6 +1,7 @@
 package com.project.application.feature.teams;
 
 
+import com.project.application.domain.TeamQuestion;
 import com.project.application.repository.AuthorRepository;
 import com.project.application.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class TeamsController {
@@ -24,6 +26,11 @@ public class TeamsController {
     public String viewTeams(Principal principal, Model model) {
         model.addAttribute("teams", authorService.findByEmail(principal.getName()).getTeams());
         return "listTeams";
+    }
+    @GetMapping("/displayTeam")
+    public String displayTeam(Principal principal,Model model,@RequestParam("teamId") long teamId){
+        List<TeamQuestion> teamQuestions=
+        model.addAttribute("questions",)
     }
 
     @PostMapping("/create-team")

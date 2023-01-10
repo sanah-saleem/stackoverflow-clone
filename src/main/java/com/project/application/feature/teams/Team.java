@@ -1,6 +1,7 @@
 package com.project.application.feature.teams;
 
 import com.project.application.domain.Author;
+import com.project.application.domain.TeamQuestion;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,6 +37,10 @@ public class Team {
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private List<Author> members;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="team_id")
+    private List<TeamQuestion> teamQuestions;
 
     public void addMember(Author author){
         if(members==null){
