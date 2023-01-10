@@ -35,6 +35,15 @@ public class Tag {
             inverseJoinColumns = @JoinColumn(name = "question_id"))
     private Set<Question> questions;
 
+	@ManyToMany(cascade = {
+			CascadeType.MERGE, CascadeType.PERSIST,
+			CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinTable(
+			name = "team_question_tag",
+			joinColumns = @JoinColumn(name = "tag_id"),
+			inverseJoinColumns = @JoinColumn(name = "team_question_id"))
+	private Set<TeamQuestion> teamQuestions;
+
 	@ManyToMany(targetEntity=Author.class, fetch=FetchType.LAZY, cascade =
 			{CascadeType.DETACH,
 					CascadeType.MERGE,
