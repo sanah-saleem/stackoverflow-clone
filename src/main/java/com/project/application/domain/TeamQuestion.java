@@ -45,15 +45,15 @@ public class TeamQuestion {
     private Boolean hasAcceptedAnswer = false;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "team_question_id")
     private List<Answer> answers;
 
     @ManyToMany(cascade = {
             CascadeType.MERGE, CascadeType.PERSIST,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
-            name = "question_tag",
-            joinColumns = @JoinColumn(name = "question_id"),
+            name = "team_question_tag",
+            joinColumns = @JoinColumn(name = "team_question_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
 

@@ -46,6 +46,9 @@ public class Author {
     private List<Question> questions;
 
     @OneToMany( mappedBy = "author", cascade = CascadeType.ALL)
+    private List<TeamQuestion> teamQuestions;
+
+    @OneToMany( mappedBy = "author", cascade = CascadeType.ALL)
     private List<Answer> answers;
 
     @OneToMany( mappedBy = "author", cascade = CascadeType.ALL)
