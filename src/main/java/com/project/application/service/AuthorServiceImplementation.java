@@ -37,7 +37,8 @@ public class AuthorServiceImplementation implements AuthorService{
     }
 
     @Override
-    public List<Tag> addTagWatched(String email, Tag watchTag) {
+//    public List<Tag> addTagWatched(String email, Tag watchTag) {
+    public void addTagWatched(String email, Tag watchTag) {
         Author user = authorRepository.findByEmail(email);
         List<Tag> tags = user.getTagsWatched();
         if(tags.contains(watchTag)){
@@ -46,6 +47,6 @@ public class AuthorServiceImplementation implements AuthorService{
         else{
             tags.add(watchTag);
         }
-        return tags;
+        authorRepository.save(user);
     }
 }

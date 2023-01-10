@@ -59,9 +59,10 @@
         padding: 3px;
       }
 
+    .tag-buttons{
 
-
-
+        display: inline-block;
+    }
 
 
 
@@ -138,7 +139,23 @@
     <div th:insert="sidenavbar.html::navbar"></div>
     <div class="div">
 
-        <h3 style="display:inline-block;padding-left:2%">ALL QUESTIONS</h3>
+        <div>
+            <h3 style="display:inline-block;padding-left:2%">ALL QUESTIONS</h3>
+            <div th:if="${isFilteredByWatchTags}">
+                <small style="display:inline-block;padding-left:2%"> questions with my watched tags</small>
+            </div>
+            <div th:if="${isFilteredByTags}">
+                <small style="display:inline-block;padding-left:2%"> Tagged with [[${tags}]]</small>
+                <form method="post">
+                    <div th:if="${state}" name="state">
+                        <button type="submit" th:formaction="@{/addWatchList}" name="watchTag" th:value="${tags}">UnWatch</button>
+                    </div>
+                    <div th:unless="${state}" name="state">
+                        <button type="submit" th:formaction="@{/addWatchList}" name="watchTag" th:value="${tags}">Watch</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <form style="display:inline-block;padding-left:40%;" th:action="@{/ask-question}" method="post">
             <button style="padding: 10px 0px 10px 0px;" ;type="submit">Ask Question</button>
         </form>
@@ -185,7 +202,9 @@
             <div style="border:1px solid grey;padding-top:3%;padding-bottom:3%;min-width:50%,max-width:50%;">
                 <a style="font-size:100%;text-decoration:none;" th:href="@{/display-question(questionId=${question.id})}" th:text=${question.title}></a><br><br>
                 <span th:each="tag : ${question.tags}">
-                    <button style="background-color:#EAFDFC; border-radius:25%; font-size: 75%;">[[${tag.name}]]</button>&nbsp
+                    <form th:action="@{/dashboard}" class="tag-buttons">
+                        <button id="button" type="submit" name="tags" th:value="${tag.name}" th:text="${tag.name}" ></button>
+                    </form>
                 </span>
             </div>
         </div>

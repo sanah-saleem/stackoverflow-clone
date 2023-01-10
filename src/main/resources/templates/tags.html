@@ -153,7 +153,7 @@
             </form>
             <!--Sort-->
             <form class="element2" th:action="@{/sortTags}" >
-                <div >
+                <div>
                     <button style="cursor: pointer" type="submit" name="sortValue" value="name">Name</button>
                     <button style="cursor: pointer" type="submit" name="sortValue" value="createdAt">New</button>
                 </div>
@@ -164,8 +164,8 @@
         <div class="tags">
             <div th:each="tag:${TagList}" >
                 <div class="container">
-                    <form th:action="@{/question-tagged}">
-                        <button id="button" type="submit" name="tagname" th:value="${tag.name}" th:text="${tag.name}" ></button>
+                    <form th:action="@{/dashboard}">
+                        <button id="button" type="submit" name="tags" th:value="${tag.name}" th:text="${tag.name}" ></button>
                     </form>
                     <br>
                         <td th:text="${ tag.createdAt}"></td><br>

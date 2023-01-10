@@ -4,6 +4,7 @@ import com.project.application.domain.*;
 import com.project.application.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,14 +34,36 @@ public class MainController {
 
 
     @GetMapping(value={"/","/dashboard"})
-    public String home(Model theModel, @RequestParam(value = "filters", required = false) String filters, @RequestParam(value = "sort", defaultValue = "Newest") String sort, @RequestParam(value = "tags", required = false) String tags, @RequestParam(value = "pageNo", defaultValue = "1") int pageNo){
+    public String home(Model theModel,
+                       @RequestParam(value = "state", defaultValue = "false") boolean state,
+                       @RequestParam(value = "filters", required = false) String filters,
+                       @RequestParam(value = "sort", defaultValue = "Newest") String sort,
+                       @RequestParam(value = "tags", required = false) String tags,
+                       @RequestParam(value = "tagMode", defaultValue = "") String tagMode,
+                       @RequestParam(value = "pageNo", defaultValue = "1") int pageNo){
 
 
         int pageSize = 10;
-        Page<Question> page = questionService.findPaginatedQuestions(pageNo, pageSize, filters, sort, tags);
+        Page<Question> page = questionService.findPaginatedQuestions(pageNo, pageSize, filters, sort, tags, tagMode);
 
         List<Question> questions = page.getContent();
 
+        if(tagMode.equals("Watched")){
+            theModel.addAttribute("isFilteredByWatchTags", true);
+        }
+        else {
+            theModel.addAttribute("isFilteredByWatchTags", false);
+        }
+
+        if(tags == null || tags == ""){
+            theModel.addAttribute("isFilteredByTags", false);
+        }
+        else {
+            theModel.addAttribute("isFilteredByTags", true);
+//            Author author = authorService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+//            state = author.getTagsWatched().contains(tags);
+        }
+        theModel.addAttribute("state", state);
         theModel.addAttribute("currentPage", pageNo);
         theModel.addAttribute("totalPages", page.getTotalPages());
         theModel.addAttribute("totalItems", page.getTotalElements());
@@ -262,26 +285,28 @@ public class MainController {
     {
         Tag watchTag = tagService.findTagByName(tagName);
         Author author= authorService.findByEmail(principal.getName());
-        List<Tag> tagswatched=authorService.addTagWatched(principal.getName(),watchTag);
-        Set<Question> questions= watchTag.getQuestions();
+//        List<Tag> tagswatched=authorService.addTagWatched(principal.getName(),watchTag);
+        authorService.addTagWatched(principal.getName(),watchTag);
+//        Set<Question> questions= watchTag.getQuestions();
         Boolean state = author.getTagsWatched().contains(watchTag);
         theModel.addAttribute("state",state);
-        theModel.addAttribute("author",author);
-        theModel.addAttribute("tag",watchTag);
-        theModel.addAttribute("Questions",questions);
-        return "specTag";
-    }
-
-    @GetMapping("/question-tagged")
-    public String questionTagged(@RequestParam("tagname") String tagname,Model theModel){
-
-        Tag qtag= tagService.findTagByName(tagname);
-//        Set<Question> questions= qtag.getQuestions();
-        theModel.addAttribute("tag",qtag);
+        theModel.addAttribute("tags", tagName);
+//        theModel.addAttribute("author",author);
+//        theModel.addAttribute("tag",watchTag);
 //        theModel.addAttribute("Questions",questions);
-
-        System.out.println("In controller"+tagname + "--------------------------------------------------------------------");
-        return "specTag";
+        return "redirect:/dashboard?state=" + state + "&tags=" + tagName;
     }
+
+//    @GetMapping("/question-tagged")
+//    public String questionTagged(@RequestParam("tagname") String tagname,Model theModel){
+//
+//        Tag qtag= tagService.findTagByName(tagname);
+////        Set<Question> questions= qtag.getQuestions();
+//        theModel.addAttribute("tag",qtag);
+////        theModel.addAttribute("Questions",questions);
+//
+//        System.out.println("In controller"+tagname + "--------------------------------------------------------------------");
+//        return "specTag";
+//    }
 
 }

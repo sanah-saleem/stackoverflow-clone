@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -155,7 +156,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Page<Question> findPaginatedQuestions(int pageNo, int pageSize, String filters, String sortField, String tags) {
+    public Page<Question> findPaginatedQuestions(int pageNo, int pageSize, String filters, String sortField, String tags, String tagMode) {
 
 
         switch (sortField){
@@ -173,34 +174,43 @@ public class QuestionServiceImpl implements QuestionService{
         Sort sort = Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
 
-        if(tags == ""){
-            tags = null;
-        }
-        if(filters == ""){
-            filters = null;
-        }
-        if(tags != null && filters != null){
-            List<String> tagList = Arrays.asList(tags.split(","));
-            if(filters.contains("NoAnswers")){
-                return questionRepository.findQuestionsWithNoAnswersWithTags(tagList, pageable);
+        if(tagMode.equals("Watched")){
+            Author author = authorService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+            List<Tag> watchedTags= author.getTagsWatched();
+            System.out.println("-----------------" + watchedTags + "-------------------------");
+            for(Tag tag : watchedTags){
+                tags += tag.getName() + ",";
+                System.out.println("-----------------" + tags + "-------------------------");
             }
-            else{
-                return questionRepository.findQuestionsWithNoAcceptedAnswersWithTags(tagList, pageable);
-            }
+            if(tags.length()>0)
+                tags = tags.substring(0, tags.length()-1);
         }
-        else if(tags != null){
-            List<String> tagList = Arrays.asList(tags.split(","));
-            return questionRepository.findQuestionsWithTags(tagList, pageable);
-        }
-        else if(filters != null){
 
-            if(filters.contains("NoAnswers")){
-                return questionRepository.findQuestionsWithNoAnswers(pageable);
+            if (tags == "") {
+                tags = null;
             }
-            else{
-                return questionRepository.findAllQuestionsWithNoAcceptedAnswers(pageable);
+            if (filters == "") {
+                filters = null;
             }
-        }
+            if (tags != null && filters != null) {
+                List<String> tagList = Arrays.asList(tags.split(","));
+                if (filters.contains("NoAnswers")) {
+                    return questionRepository.findQuestionsWithNoAnswersWithTags(tagList, pageable);
+                } else {
+                    return questionRepository.findQuestionsWithNoAcceptedAnswersWithTags(tagList, pageable);
+                }
+            } else if (tags != null) {
+                List<String> tagList = Arrays.asList(tags.split(","));
+                return questionRepository.findQuestionsWithTags(tagList, pageable);
+            } else if (filters != null) {
+
+                if (filters.contains("NoAnswers")) {
+                    return questionRepository.findQuestionsWithNoAnswers(pageable);
+                } else {
+                    return questionRepository.findAllQuestionsWithNoAcceptedAnswers(pageable);
+                }
+            }
+
 
         return this.questionRepository.findAll(pageable);
     }
