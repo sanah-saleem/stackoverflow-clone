@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AuthorServiceImplementation implements AuthorService{
     @Autowired
@@ -24,5 +26,10 @@ public class AuthorServiceImplementation implements AuthorService{
     @Override
     public Author findByEmail(String email) {
         return authorRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<Author> getAuthors() {
+        return authorRepository.findAll();
     }
 }

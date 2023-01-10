@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+    /* The side navigation menu */
+.sidebar {
+    margin-top: 3%;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+/* Sidebar links */
+.sidebar a {
+    display: block;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+}
+
+/* Active/current link */
+.sidebar a.active {
+    background-color: #04AA6D;
+    color: white;
+}
+
+/* Links on mouse-over */
+.sidebar a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+div.content {
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px;
+}
+
+.user {
+        margin-left: 22%;
+        padding: 3.75%;
+        display: grid;
+        grid-template-columns: 100%;
+        grid-column-gap: 0;
+        grid-row-gap: 20px;
+    }
+.user .container {
+
+        padding: 100px;
+        background-color: azure;
+        border: 1px solid black;
+        color: black
+    }
+
+body{
+    background-color: #555;
+
+}
+ #header .container{
+        border: 1px solid black;
+        display: flex;
+        position: fixed;
+        top: 5px;
+        justify-content: space-around;
+        width: 100%;
+        align-items: center;
+        background-color: bisque;
+      }
+</style>
+</head>
+<body>
+<div th:insert="siteheader.html::site-header" id="header"></div>
+    <div th:insert="sidenavbar.html::navbar"></div>
+
+    <div class="user" th:each="user:${Users}">
+        
+        <div class="container">
+            <a href="@{/displayUser}"><span  th:text="${user.name}"></span></a><br>
+            <span th:text="${user.email}"></span><br>
+            <div th:each="tag:${user.tagsWatched}">
+            <a href="#"><tr th:text="${tag}">tag</tr></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

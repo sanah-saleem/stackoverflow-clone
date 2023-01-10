@@ -10,7 +10,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface QuestionRepository extends JpaRepository<Question, Long> {
+public interface
+QuestionRepository extends JpaRepository<Question, Long> {
     @Query("SELECT distinct Q from Question Q join Q.tags T where (Q.title like %:search%) or (Q.problem like %:search%) or (T.name like %:search%)")
     public Page<Question> findAllQuestionsWithSearchKey(@Param("search") String searchKey, Pageable pageable);
 
