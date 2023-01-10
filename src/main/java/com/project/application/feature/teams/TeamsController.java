@@ -2,14 +2,11 @@ package com.project.application.feature.teams;
 
 
 import com.project.application.domain.TeamQuestion;
-import com.project.application.repository.AuthorRepository;
 import com.project.application.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -18,7 +15,7 @@ import java.util.List;
 public class TeamsController {
 
     @Autowired
-    TeamService teamService;
+    private TeamService teamService;
     @Autowired
     private AuthorService authorService;
 
@@ -27,6 +24,7 @@ public class TeamsController {
         model.addAttribute("teams", authorService.findByEmail(principal.getName()).getTeams());
         return "listTeams";
     }
+
     @GetMapping("/displayTeam")
     public String displayTeam(Principal principal,Model model,@RequestParam("teamId") long teamId){
         List<TeamQuestion> teamQuestions=teamService.getAllTeamQuestions(teamId);
@@ -39,6 +37,13 @@ public class TeamsController {
         Team team = teamService.saveTeam(teamName, principal.getName());
         model.addAttribute("team", team);
         return "viewTeam";
+    }
+
+    @PostMapping("/delete-team")
+    public String updateTeams(@RequestParam("teamId") long teamId, Model model, Principal principal) {
+        teamService.deleteTeam(teamId);
+        model.addAttribute("teams", authorService.findByEmail(principal.getName()).getTeams());
+        return "listTeams";
     }
 
     @PostMapping("/add-member")
@@ -71,5 +76,39 @@ public class TeamsController {
         Team team = teamService.makeAdmin(teamId, memberEmail);
         model.addAttribute("team", team);
         return "viewTeam";
+    }
+
+    @PostMapping("/ask-team-question")
+    public String askTeamQuestion(@RequestParam("teamId") long teamId, Model model) {
+        model.addAttribute("teamId", teamId);
+        model.addAttribute("newTeamQuestion", new TeamQuestion());
+        return "inputTeamQuestion";
+    }
+
+    @PostMapping("/save-team-question")
+    public String saveTeamQuestion(@RequestParam("teamId") long teamId,
+                                   @ModelAttribute("teamQuestion") TeamQuestion teamQuestion, Model model) {
+        teamService.saveTeamQuestion(teamId, teamQuestion);
+        model.addAttribute("questions", teamService.getTeamById(teamId).getTeamQuestions());
+        return "viewTeam";
+    }
+
+    @PostMapping("/viewTeamQuestion/{id}")
+    public String viewTeamQuestion(@PathVariable("id") long teamQuestionId, Model model) {
+        model.addAttribute("teamQuestion", teamService.getTeamQuestionById(teamQuestionId));
+        return "viewTeamQuestion";
+    }
+
+    @PostMapping("/update-team-question/{id}")
+    public String updateTeamQuestion(@PathVariable("id") long teamId,
+                                     @RequestParam("teamQuestionId") long teamQuestionId, Model model) {
+        model.addAttribute("teamId", teamId);
+        model.addAttribute("newTeamQuestion", teamService.getTeamQuestionById(teamQuestionId));
+        return "inputTeamQuestion";
+    }
+
+    @PostMapping("/delete-team-question/{id}")
+    public String deleteTeamQuestion(@PathVariable("id") long teamQuestionId) {
+        return "";
     }
 }

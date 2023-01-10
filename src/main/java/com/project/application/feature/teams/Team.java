@@ -42,6 +42,19 @@ public class Team {
     @JoinColumn(name="team_id")
     private List<TeamQuestion> teamQuestions;
 
+    public void addQuestion(TeamQuestion question) {
+        if(teamQuestions == null) {
+            teamQuestions = new ArrayList();
+        }
+        teamQuestions.add(question);
+    }
+
+    public void removeQuestion(TeamQuestion question) {
+        if(teamQuestions != null) {
+            teamQuestions.remove(question);
+        }
+    }
+
     public void addMember(Author author){
         if(members==null){
             members=new ArrayList<>();
