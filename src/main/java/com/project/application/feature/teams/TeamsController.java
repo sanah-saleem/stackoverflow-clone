@@ -24,15 +24,15 @@ public class TeamsController {
 
     @PostMapping("/add-member")
     public String addMember(@RequestParam("teamId") long teamId,
-                            @RequestParam("teamId") long memberEmail, Model model) {
-        Team team = teamService.saveTeam(teamId, memberEmail);
+                            @RequestParam("memberEmail") String memberEmail, Model model) {
+        Team team = teamService.addMember(teamId, memberEmail);
         model.addAttribute("team", team);
         return "#";
     }
 
     @PostMapping("/remove-member")
     public String removeMember(@RequestParam("teamId") long teamId,
-                               @RequestParam("teamId") long memberEmail, Model model) {
+                               @RequestParam("memberEmail") String memberEmail, Model model) {
         Team team = teamService.removeMember(teamId, memberEmail);
         model.addAttribute("team", team);
         return "#";
@@ -40,7 +40,7 @@ public class TeamsController {
 
     @PostMapping("/make-admin")
     public String makeAdmin(@RequestParam("teamId") long teamId,
-                            @RequestParam("teamId") long memberEmail, Model model) {
+                            @RequestParam("memberEmail") String memberEmail, Model model) {
         Team team = teamService.makeAdmin(teamId, memberEmail);
         model.addAttribute("team", team);
         return "#";
