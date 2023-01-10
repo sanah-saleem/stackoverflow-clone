@@ -70,7 +70,7 @@
 </div>
 <div th:insert="sidenavbar.html::navbar"></div>
 
-<div style="margin:6.5% 0 0 22%;padding-bottom:10%">
+<div style="margin:6.5% 0 0 22%;padding-bottom:10%;display:inline-block;max-width:50%;min-width:50%;">
     <div>
         <h2>Questions</h2>
         <br>
@@ -83,8 +83,18 @@
     </div>
 <div th:each="question : ${team.teamQuestions}">
   <div style="border:1px solid grey;padding-top:3%;padding-bottom:3%;min-width:50%,max-width:50%;">
-    <a style="font-size:100%;text-decoration:none;" th:href="@{/display-question(questionId=${question.id})}" th:text=${question.title}></a>
+    <a style="font-size:100%;text-decoration:none;" th:href="@{/viewTeamQuestion(questionId=${question.id})}" th:text=${question.title}></a>
   </div>
+</div>
+</div>
+<div style="display:inline-block;max-width:30;min-width:30;border-left:1px solid grey">
+    <h2>Members</h2>
+<div th:each="member : ${team.members}">
+    <div>
+    <p th:text=${member.email}></p>
+        <div th:if="${#strings.equals(username,team.admin.email)}">
+        </div>
+    </div>
 </div>
 </div>
 </body>
