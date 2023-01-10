@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Question</title>
+
+    <link th:rel="stylesheet" th:href="@{/assets/summernote/summernote-bs4.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+
     <style>
         body{
       background-color:#FAF8F1;
@@ -25,7 +29,8 @@
 <!--        margin: 3px;-->
 <!--        padding: 5px;-->
       }
-    #content{
+
+    #display-question-content{
         margin-top: 70px;
         margin-left:22%;
         max-width:50%;
@@ -72,6 +77,61 @@
         padding: 1px 16px;
         height: 1000px;
     }
+
+    #question-content{
+        display: flex;
+
+    }
+    .question-actions{
+        display: inline-block;
+    }
+
+    .answer-actions{
+        display: inline-block;
+    }
+
+    /* The side navigation menu */
+    .sidebar {
+
+        padding-left:10% ;
+        width: 10%;
+        padding-top:3%;
+        background-color:#FAF8F1;
+        position: fixed;
+        top:6.5%;
+        height: 100%;
+        overflow: auto;
+        border-right:1px solid grey;
+        text-align:center;
+    }
+
+    /* Sidebar links */
+    .sidebar a {
+        display: block;
+        color: black;
+        padding: 16px;
+        text-decoration: none;
+    }
+
+    /* Active/current link */
+    .sidebar a.active {
+        background-color: #04AA6D;
+        color: white;
+    }
+
+    /* Links on mouse-over */
+    .sidebar a:hover:not(.active) {
+        background-color: #555;
+        color: white;
+    }
+
+    /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+    div.content {
+        margin-left: 200px;
+        padding: 1px 16px;
+        height: 1000px;
+    }
+
     </style>
 </head>
 <body>
@@ -79,118 +139,131 @@
     <div th:insert="dashboard.html :: site-header"></div>
 </div>
 <div th:insert="sidenavbar.html::navbar"></div>
-<div id="content">
-    <div th:if="${question.upVotes.contains(author)}">
-        <form th:action="@{/remove-upvote}" method="post">
-            <input type="hidden" name="questionId" th:value="${question.id}">
-            <input type="submit" value="remove-upvote">
-        </form>
+<div id="display-question-content">
+
+    <div id = "question-content">
+        <div sec:authorize="isAuthenticated()" style="margin:10px;">
+            <div th:if="${question.upVotes.contains(author)}">
+                <form th:action="@{/remove-upvote}" method="post">
+                    <input type="hidden" name="questionId" th:value="${question.id}">
+                    <input type="submit" value="remove-upvote">
+                </form>
+            </div>
+            <div th:unless="${question.upVotes.contains(author)}" >
+                <form th:action="@{/upvote}" method="post">
+                    <input type="hidden" name="questionId" th:value="${question.id}">
+                    <input type="submit" value="upvote">
+                </form>
+            </div>
+
+            <div>[[${question.score}]]</div>
+
+            <div th:if="${question.downVotes.contains(author)}">
+                <form th:action="@{/remove-downvote}" method="post">
+                    <input type="hidden" name="questionId" th:value="${question.id}">
+                    <input type="submit" value="remove-downvote">
+                </form>
+            </div>
+            <div th:unless="${question.downVotes.contains(author)}">
+                <form th:action="@{/downvote}" method="post">
+                    <input type="hidden" name="questionId" th:value="${question.id}">
+                    <input type="submit" value="downvote">
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <h3 th:text=${question.title}></h3>
+            <p th:utext=${question.problem}></p>
+            <p th:utext="${question.expectation}"></p>
+            <span th:each="tag : ${question.tags}">
+                    <button>[[${tag.name}]]</button>&nbsp
+            </span>
+        </div>
     </div>
-    <div th:unless="${question.upVotes.contains(author)}" >
-        <form th:action="@{/upvote}" method="post">
-            <input type="hidden" name="questionId" th:value="${question.id}">
-            <input type="submit" value="upvote">
-        </form>
-    </div>
-    <br><br>
-    <div th:if="${question.downVotes.contains(author)}">
-        <form th:action="@{/remove-downvote}" method="post">
-            <input type="hidden" name="questionId" th:value="${question.id}">
-            <input type="submit" value="remove-downvote">
-        </form>
-    </div>
-    <div th:unless="${question.downVotes.contains(author)}">
-        <form th:action="@{/downvote}" method="post">
-            <input type="hidden" name="questionId" th:value="${question.id}">
-            <input type="submit" value="downvote">
-        </form>
-    </div>
-    <h3 th:text=${question.title}></h3>
-    <p th:text=${question.problem}></p>
-    <p th:text="${question.expectation}"></p>
-    <span th:each="tag : ${question.tags}">
-            <span>[[${tag.name}]]</span>&nbsp
-    </span>
 
     <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <form th:action="@{/update-question/{id}(id=${question.id})}" method="post">
+        <form class="question-actions" th:action="@{/update-question/{id}(id=${question.id})}" method="post" style="display: inline-block;">
             <button type="submit">update</button>
         </form>
-        <form th:action="@{/delete-question/{id}(id=${question.id})}" method="post">
+        <form class="question-actions" th:action="@{/delete-question/{id}(id=${question.id})}" method="post" style="display: inline-block;">
             <button type="submit">delete</button>
         </form><br><br>
     </div>
     <div sec:authorize="hasRole('ROLE_USER')">
         <div th:if="${#strings.equals(username, question.author.email)}">
-            <form th:action="@{/update-question/{id}(id=${question.id})}" method="post">
+            <form class="question-actions" th:action="@{/update-question/{id}(id=${question.id})}" method="post">
                 <button type="submit">update</button>
             </form>
-            <form th:action="@{/delete-question/{id}(id=${question.id})}" method="post">
+            <form class="question-actions" th:action="@{/delete-question/{id}(id=${question.id})}" method="post">
                 <button type="submit">delete</button>
             </form><br><br>
         </div>
     </div>
 
+    <hr>
+
     <h4>Answers</h4><br>
     <div class="answers" th:each="answer : ${question.answers}">
-        <div th:text="${answer.content}"></div><br>
+        <div th:utext="${answer.content}"></div><br>
         <div th:if="${answer.isAccepted == true}">
             accepted Answer
         </div>
         <div th:if="${#strings.equals(username, question.author.email)}">
-            <div th:if="${answer.isAccepted == false}">
-                <form th:action="@{/accept-answer/{id}(id=${answer.id})}" method="post">
+            <span th:if="${answer.isAccepted == false}">
+                <form class="answer-actions" th:action="@{/accept-answer/{id}(id=${answer.id})}" method="post">
                     <input type="hidden" name="questionId" th:value="${question.id}">
                     <button type="submit">accept</button>
                 </form>
-            </div>
+            </span>
         </div>
 
         <!--        ----------------------------------------------------                -->
-        <div th:if="${showCommentForId == answer.id}" th:object="${newComment}">
-            <form th:action="@{/save-comment}" method="post">
+        <span th:if="${showCommentForId == answer.id}" th:object="${newComment}">
+            <form class="answer-actions" th:action="@{/save-comment}" method="post">
                 <input type="hidden" name="questionId" th:value="${question.id}">
                 <input type="hidden" name="answerId" th:value="${answer.id}">
                 <textarea th:field="*{content}"></textarea>
-                <button type="submit">comment</button>
+                <button type="submit">add comment</button>
             </form>
-        </div>
-        <div th:unless="${showCommentForId == answer.id}">
-            <form th:action="@{/display-question}">
+        </span>
+        <span th:unless="${showCommentForId == answer.id}">
+            <form class="answer-actions" th:action="@{/display-question}">
                 <input type="hidden" name="questionId" th:value="${question.id}">
                 <input type="hidden" name="showCommentForId" th:value="${answer.id}">
                 <button type="submit">comment</button>
             </form>
-        </div>
+        </span>
 
-        <div sec:authorize="hasRole('ROLE_ADMIN')">
-            <form th:action="@{/update-answer/{id}(id=${answer.id})}" method="post">
+        <span sec:authorize="hasRole('ROLE_ADMIN')">
+            <form class="answer-actions" th:action="@{/update-answer/{id}(id=${answer.id})}" method="post">
                 <input type="hidden" name="questionId" th:value="${question.id}">
                 <button type="submit">update</button>
             </form>
 
-            <form th:action="@{/delete-answer/{id}(id=${answer.id})}" method="post">
+            <form class="answer-actions" th:action="@{/delete-answer/{id}(id=${answer.id})}" method="post">
                 <input type="hidden" name="questionId" th:value="${question.id}">
                 <button type="submit">delete</button>
             </form><br>
-        </div>
-        <div sec:authorize="hasRole('ROLE_USER')">
-            <div th:if="${#strings.equals(username, answer.author.email)}">
-                <form th:action="@{/update-answer/{id}(id=${answer.id})}" method="post">
+        </span>
+        <span sec:authorize="hasRole('ROLE_USER')">
+            <span th:if="${#strings.equals(username, answer.author.email)}">
+                <form class="answer-actions" th:action="@{/update-answer/{id}(id=${answer.id})}" method="post">
                     <input type="hidden" name="questionId" th:value="${question.id}">
                     <button type="submit">update</button>
                 </form>
 
-                <form th:action="@{/delete-answer/{id}(id=${answer.id})}" method="post">
+                <form class="answer-actions" th:action="@{/delete-answer/{id}(id=${answer.id})}" method="post">
                     <input type="hidden" name="questionId" th:value="${question.id}">
                     <button type="submit">delete</button>
                 </form><br>
 
-            </div>
-        </div>
+            </span>
+        </span>
         <!--        ---------------------------------------------------     -->
         <div th:each="comment : ${answer.comments}">
-            <div th:text="${comment.content}"></div>
+            <hr>
+            <div th:utext="${comment.content}"></div>
 
             <div sec:authorize="hasRole('ROLE_ADMIN')">
                 <form th:action="@{/delete-comment/{id}(id=${comment.id})}" method="post">
@@ -207,54 +280,33 @@
                 </div>
             </div>
         </div>
-        <!--        <div th:if="${showCommentForId == answer.id}" th:object="${newComment}">-->
-        <!--            <form th:action="@{/save-comment}" method="post">-->
-        <!--                <input type="hidden" name="questionId" th:value="${question.id}">-->
-        <!--                <input type="hidden" name="answerId" th:value="${answer.id}">-->
-        <!--                <textarea th:field="*{content}"></textarea>-->
-        <!--                <button type="submit">comment</button>-->
-        <!--            </form>-->
-        <!--        </div>-->
-        <!--        <div th:unless="showCommentForId == answer.id">-->
-        <!--            <form th:action="@{/display-question}">-->
-        <!--                <input type="hidden" name="questionId" th:value="${question.id}">-->
-        <!--                <input type="hidden" name="showCommentForId" th:value="${answer.id}">-->
-        <!--                <button type="submit">comment</button>-->
-        <!--            </form>-->
-        <!--        </div>-->
 
-        <!--        <div sec:authorize="hasRole('ROLE_ADMIN')">-->
-        <!--            <form th:action="@{/update-answer/{id}(id=${answer.id})}" method="post">-->
-        <!--                <input type="hidden" name="questionId" th:value="${question.id}">-->
-        <!--                <button type="submit">update</button>-->
-        <!--            </form>-->
-
-        <!--            <form th:action="@{/delete-answer/{id}(id=${answer.id})}" method="post">-->
-        <!--                <input type="hidden" name="questionId" th:value="${question.id}">-->
-        <!--                <button type="submit">delete</button>-->
-        <!--            </form><br>-->
-        <!--        </div>-->
-        <!--        <div sec:authorize="hasRole('ROLE_USER')">-->
-        <!--            <div th:if="${#strings.equals(username, answer.author.email)}">-->
-        <!--                <form th:action="@{/update-answer/{id}(id=${answer.id})}" method="post">-->
-        <!--                    <input type="hidden" name="questionId" th:value="${question.id}">-->
-        <!--                    <button type="submit">update</button>-->
-        <!--                </form>-->
-
-        <!--                <form th:action="@{/delete-answer/{id}(id=${answer.id})}" method="post">-->
-        <!--                    <input type="hidden" name="questionId" th:value="${question.id}">-->
-        <!--                    <button type="submit">delete</button>-->
-        <!--                </form><br>-->
-        <!--            </div>-->
-        <!--        </div>-->
+        <hr>
 
     </div>
     <br><br><h5>Anything to say?</h5>
     <form th:action="@{/save-answer}" th:object="${newAnswer}" method="post">
         <input type="hidden" name="questionId" th:value="${question.id}">
-        <textarea id="answer-field" th:field="*{content}"></textarea>
+<!--        <textarea id="answer-field" th:field="*{content}"></textarea>-->
+        <div class="form-group">
+            <label for="content">Content:</label>
+        <textarea type="text" rows="4" id="content" placeholder="Content" class="form-control"
+                      th:field="*{content}" autocomplete="off"></textarea>
+        </div>
         <button type="submit">submit</button>
     </form>
 </div>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/summernote/summernote-bs4.js}"></script>
+
+<script>
+$('#content').summernote({
+    height: 200
+});
+</script>
+
 </body>
 </html>

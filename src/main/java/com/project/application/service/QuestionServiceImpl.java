@@ -11,9 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
+@Transactional
 public class QuestionServiceImpl implements QuestionService{
 
     @Autowired
@@ -38,10 +40,11 @@ public class QuestionServiceImpl implements QuestionService{
         List<String> allTagNames = Arrays.asList(tagName.split(","));
         Set<String> uniqueTagNames=new HashSet<>(allTagNames);
         List<String> tagNames=new ArrayList<>(uniqueTagNames);
-        System.out.println(tagNames);
+//        System.out.println(tagNames);
         List<Tag> tags = tagService.saveTag(tagNames);
-        System.out.println(tags);
+//        System.out.println(tags);
         question.setTags(tags);
+
         Author author = authorService.findByEmail(email);
         author.addQuestion(question);
         questionRepository.save(question);
@@ -50,6 +53,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
+    @Transactional
     public Question getQuestionById(long questionId){
 
         return questionRepository.findById(questionId).get();
@@ -71,36 +75,59 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Override
     public void addUpVote(long questionId, String email) {
+
         Question theQuestion = getQuestionById(questionId);
+
+        System.out.println("Question score" + theQuestion.getScore() + "------------------------------------------------");
+
         Author currentAuthor = authorService.findByEmail(email);
         if(theQuestion.getDownVotes().contains(currentAuthor)) {
             removeDownVote(questionId, email);
         }
         theQuestion.addUpVote(currentAuthor);
+
+        theQuestion.setScore(getUpdateScore(theQuestion));
+        questionRepository.save(theQuestion);
     }
 
     @Override
     public void removeUpVote(long questionId, String email) {
         Question theQuestion = getQuestionById(questionId);
+        System.out.println("Question score" + theQuestion.getScore() + "------------------------------------------------");
+
         Author currentAuthor = authorService.findByEmail(email);
         theQuestion.removeUpVote(currentAuthor);
+
+        theQuestion.setScore(getUpdateScore(theQuestion));
+        questionRepository.save(theQuestion);
     }
 
     @Override
     public void addDownVote(long questionId, String email) {
         Question theQuestion = getQuestionById(questionId);
+
+        System.out.println("Question score" + theQuestion.getScore() + "------------------------------------------------");
+
         Author currentAuthor = authorService.findByEmail(email);
         if(theQuestion.getUpVotes().contains(currentAuthor)) {
             removeUpVote(questionId, email);
         }
         theQuestion.addDownVote(currentAuthor);
+
+        theQuestion.setScore(getUpdateScore(theQuestion));
+        questionRepository.save(theQuestion);
     }
 
     @Override
     public void removeDownVote(long questionId, String email) {
         Question theQuestion = getQuestionById(questionId);
+        System.out.println("Question score" + theQuestion.getScore() + "------------------------------------------------");
+
         Author currentAuthor = authorService.findByEmail(email);
         theQuestion.removeDownVote(currentAuthor);
+
+        theQuestion.setScore(getUpdateScore(theQuestion));
+        questionRepository.save(theQuestion);
     }
 
     //not needed
@@ -136,7 +163,7 @@ public class QuestionServiceImpl implements QuestionService{
                 sortField = "updatedAt";
                 break;
             case "HighestScore":
-                sortField = "votes";
+                sortField = "score";
                 break;
             default:
                 sortField = "createdAt";
@@ -183,6 +210,26 @@ public class QuestionServiceImpl implements QuestionService{
 
         Pageable pageable = PageRequest.of(pageNo-1, pageSize);
         return questionRepository.findAllQuestionsWithSearchKey(searchKey, pageable);
+    }
+
+
+    public long getUpdateScore(Question question){
+
+        long updatedScore = 0;
+
+        if(!(question.getUpVotes() == null && question.getDownVotes() == null)){
+
+            if(question.getUpVotes() != null && question.getDownVotes() == null){
+                updatedScore = question.getUpVotes().size();
+            }
+            else if (question.getUpVotes() == null && question.getDownVotes() != null){
+                updatedScore = 0 - question.getDownVotes().size();
+            }
+            else {
+                updatedScore = question.getUpVotes().size() - question.getDownVotes().size();
+            }
+        }
+        return updatedScore;
     }
 
 }

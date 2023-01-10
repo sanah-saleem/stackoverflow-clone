@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Getter;
@@ -21,7 +22,9 @@ public class Answer {
 	@GeneratedValue(strategy=GenerationType.IDENTITY )
 	@Column(name="id", updatable = false)
 	private long id;
-	
+
+	@Lob
+	@Type(type = "org.hibernate.type.TextType")
 	@Column(name="content")
 	private String content;
 	

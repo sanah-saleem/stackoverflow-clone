@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class TagServiceImpl implements TagService {
 
     @Autowired
@@ -63,15 +65,15 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> sortTags(String sortValue) {
         if(sortValue.equals("name") ){
-            return tagRepository.findAll(Sort.by(sortValue).descending());
+            return tagRepository.findAll(Sort.by(sortValue).ascending());
         }
         else{
-            return  tagRepository.findAll(Sort.by(sortValue).ascending());
+            return  tagRepository.findAll(Sort.by(sortValue).descending());
         }
     }
 
     @Override
-    public Tag findTagByName(String tagname) {
-        return tagRepository.findByName(tagname);
+    public Tag findTagByName(String tagName) {
+        return tagRepository.findByName(tagName);
     }
 }

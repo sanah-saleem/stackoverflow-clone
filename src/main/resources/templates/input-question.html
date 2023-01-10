@@ -2,7 +2,11 @@
 <html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
+        <title>Ask Question</title>
+
+        <link th:rel="stylesheet" th:href="@{/assets/summernote/summernote-bs4.css}"/>
+        <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+
         <style>
             body{
             background-color:#FAF8F1;
@@ -31,15 +35,36 @@
             <input class="input"  type="text" th:name="title" th:value="${question?.title}" placeholder="Enter the title for your question"/>
             <br><br>
             <h4>What are the details of your problem?</h4>
-            <textarea id="problem" type="textarea" th:name="problem" th:field="*{problem}" />
+<!--            <textarea id="problem" type="textarea" th:name="problem" th:field="*{problem}" />-->
+            <div class="form-group">
+<!--                <label for="content">Content:</label>-->
+                <textarea type="text" rows="4" id="content" placeholder="Explain Your Problem..." class="form-control"
+                          th:field="*{problem}" autocomplete="off"></textarea>
+            </div>
             <br><br>
             <h4>What did you try and what were you expecting?</h4>
-            <textarea id="expectation" type="textarea" th:name="expectation" th:field="*{expectation}" />
+<!--            <textarea id="expectation" type="textarea" th:name="expectation" th:field="*{expectation}" />-->
+            <div class="form-group">
+                <textarea type="text" rows="4" placeholder="What Are You Expecting As Answer...." class="form-control"
+                          th:field="*{expectation}" autocomplete="off"></textarea>
+            </div>
             <br><br>
             <h4>Tags</h4>
             <input class="input" type="text" name="tag" th:value="${questionTags}">
             <br><br>
             <button type="submit">Post</button>
         </form>
+
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+        <script th:src="@{/assets/summernote/summernote-bs4.js}"></script>
+
+        <script>
+            $('#content').summernote({
+                height: 200
+            });
+        </script>
+
     </body>
 </html>

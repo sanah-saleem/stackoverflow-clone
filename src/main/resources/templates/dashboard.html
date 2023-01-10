@@ -146,10 +146,9 @@
         <br>
         <div style="margin-left:2%">
             <div class="tabs">
-                <form id="tabsForm" action="@{/dashboard}" name="tab">
-                    <button type="submit" value="Newest">Newest</button>
-                    <button type="submit" value="Active">Active</button>
-                    <button type="submit" value="Unanswered">Unanswered</button>
+                <form id="tabsForm" th:action="@{/dashboard}" name="tab">
+                    <button type="submit" name="sort" value="Newest">Newest</button>
+                    <button type="submit" name="filters" value="NoAnswers">Unanswered</button>
                 </form>&nbsp&nbsp&nbsp
                 <button style="cursor: pointer; margin:10px 0px;">Filter</button>
             </div>
@@ -160,15 +159,12 @@
                             <h3>Filter By</h3>
                             <input type="checkbox" name="filters" value="NoAnswers" >No Answers<br>
                             <input type="checkbox" name="filters" value="NoAcceptedAnswer" >No Accepted Answer<br>
-                            <input type="checkbox" name="filters" value="HasBounty" >Has Bounty
                         </div>
                         <div>
                             <h3>Sorted By</h3>
                             <input type="radio" name="sort" value="Newest" checked>Newest<br>
                             <input type="radio" name="sort" value="RecentActivity" >Recent Activity<br>
                             <input type="radio" name="sort" value="HighestScore" >Highest Score<br>
-                            <input type="radio" name="sort" value="MostFrequent" >Most Frequent<br>
-                            <input type="radio" name="sort" value="BountyEndingSoon" >Bounty Ending Soon
                         </div>
                         <div>
                             <h3>Tagged With</h3>
@@ -187,8 +183,10 @@
         <br><br>
         <div th:each="question : ${questions}">
             <div style="border:1px solid grey;padding-top:3%;padding-bottom:3%;min-width:50%,max-width:50%;">
-                <a style="font-size:100%;text-decoration:none;" th:href="@{/display-question(questionId=${question.id})}" th:text=${question.title}></a>
-                <p style="font-size:80%;"th:text=${question.problem}></p>
+                <a style="font-size:100%;text-decoration:none;" th:href="@{/display-question(questionId=${question.id})}" th:text=${question.title}></a><br><br>
+                <span th:each="tag : ${question.tags}">
+                    <button style="background-color:#EAFDFC; border-radius:25%; font-size: 75%;">[[${tag.name}]]</button>&nbsp
+                </span>
             </div>
         </div>
 

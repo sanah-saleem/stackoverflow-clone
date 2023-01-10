@@ -26,10 +26,12 @@ public class Question {
 	
 	@Column(name="title")
 	private String title;
-	
+
+	@Lob
 	@Column(name="problem")
 	private String problem;
 
+	@Lob
 	@Column(name="expectation")
 	private String expectation;
 	
@@ -43,6 +45,9 @@ public class Question {
 
 	@Column(name="has_accepted_answer")
 	private Boolean hasAcceptedAnswer = false;
+
+	@Column(name = "score")
+	private long score = 0;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "question_id")
