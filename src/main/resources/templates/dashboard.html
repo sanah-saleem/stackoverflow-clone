@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>dashboard</title>
+    <style>
+      body{
+      background-color:#FAF8F1;
+      margin:0px;
+      }
+      #header .container{
+        border: 1px solid black;
+        display: flex;
+        position: fixed;
+        background-color:#FAF8F1;
+        top:0px;
+        justify-content: space-around;
+        width: 100%;
+        align-items: center;
+<!--        margin: 3px;-->
+<!--        padding: 5px;-->
+      }
+    #content{
+        margin: 10px 0px;
+    }
+      .div{
+      min-width:50%;
+      max-width:50%;
+      display:inline-block;
+      border-left-style: single;
+      border-left-width:3px;
+      border-color:black;
+      margin-left:20%;
+      margin-top:2%;
+      }
+
+      .tabs{
+        display: flex;
+        justify-content: flex-end;
+      }
+      .tabs #tabsForm button{
+            border: 1px solid black;
+            padding: 10px 24px;
+            cursor: pointer;
+            float: left;
+            margin: 10px 0px;
+
+      }
+      .filters{
+        border: 1px solid black;
+      }
+      .filters-div{
+
+        font-size:  75%;
+        display: flex;
+        justify-content: space-between;
+        padding: 3px;
+      }
+
+
+
+
+
+
+
+   /* The side navigation menu */
+    .sidebar {
+
+        padding-left:10% ;
+        width: 10%;
+        padding-top:3%;
+        background-color:#FAF8F1;
+        position: fixed;
+        top:7%;
+        height: 100%;
+        overflow: auto;
+        border-right:1px solid grey;
+        text-align:center;
+    }
+
+    /* Sidebar links */
+    .sidebar a {
+        display: block;
+        color: black;
+        padding: 16px;
+        text-decoration: none;
+    }
+
+    /* Active/current link */
+    .sidebar a.active {
+        background-color: #04AA6D;
+        color: white;
+    }
+
+    /* Links on mouse-over */
+    .sidebar a:hover:not(.active) {
+        background-color: #555;
+        color: white;
+    }
+
+    /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+    div.content {
+        margin-left: 200px;
+        padding: 1px 16px;
+        height: 1000px;
+    }
+    </style>
+</head>
+<body>
+<div th:fragment="site-header" id="header">
+    <div class="container">
+        <h3>stack Overflow</h3>&nbsp&nbsp
+        <form th:action="@{/search}" method="get">
+            <input style="height: 30px;width:100%; margin: 10px;" type="search"  name="searchKey" placeholder="Search..">
+        </form>
+        <div sec:authorize="isAnonymous()" style="margin:10px;">
+            <form th:action="@{/login}" method="post">
+                <input style="padding: 5px 12px;" type="submit" value="Log In">
+            </form>
+        </div>
+        <div sec:authorize="isAuthenticated()" style="margin:10px;">
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Log Out">
+            </form>
+        </div>
+    </div>
+</div><br><br>
+<div id="content">
+    <!--    <div style="min-width:20%;display:inline-block;position:fixed;top:7%;left:0px;height:100%;text-align:center;padding-top:3%;border-right:1px solid grey">-->
+    <!--        <div>question</div>-->
+    <!--        <br><br><br><br>-->
+    <!--        <div >user</div>-->
+    <!--        <br><br><br><br>-->
+    <!--        <div >Tags</div>-->
+    <!--    </div>-->
+    <div th:insert="sidenavbar.html::navbar"></div>
+    <div class="div">
+
+        <h3 style="display:inline-block;padding-left:2%">ALL QUESTIONS</h3>
+        <form style="display:inline-block;padding-left:40%;" th:action="@{/ask-question}" method="post">
+            <button style="padding: 10px 0px 10px 0px;" ;type="submit">Ask Question</button>
+        </form>
+        <br>
+        <br>
+        <div style="margin-left:2%">
+            <div class="tabs">
+                <form id="tabsForm" action="@{/dashboard}" name="tab">
+                    <button type="submit" value="Newest">Newest</button>
+                    <button type="submit" value="Active">Active</button>
+                    <button type="submit" value="Unanswered">Unanswered</button>
+                </form>&nbsp&nbsp&nbsp
+                <button style="cursor: pointer; margin:10px 0px;">Filter</button>
+            </div>
+            <div class="filters">
+                <form th:action="@{/dashboard}">
+                    <div class="filters-div">
+                        <div>
+                            <h3>Filter By</h3>
+                            <input type="checkbox" name="filters" value="NoAnswers" >No Answers<br>
+                            <input type="checkbox" name="filters" value="NoAcceptedAnswer" >No Accepted Answer<br>
+                            <input type="checkbox" name="filters" value="HasBounty" >Has Bounty
+                        </div>
+                        <div>
+                            <h3>Sorted By</h3>
+                            <input type="radio" name="sort" value="Newest" checked>Newest<br>
+                            <input type="radio" name="sort" value="RecentActivity" >Recent Activity<br>
+                            <input type="radio" name="sort" value="HighestScore" >Highest Score<br>
+                            <input type="radio" name="sort" value="MostFrequent" >Most Frequent<br>
+                            <input type="radio" name="sort" value="BountyEndingSoon" >Bounty Ending Soon
+                        </div>
+                        <div>
+                            <h3>Tagged With</h3>
+                            <input type="radio" name="tagMode" value="Watched"> My Watched tags<br>
+                            <input type="radio" name="tagMode" checked> The following tags: <br>
+                            <input type="search" style="padding: 5px;"name="tags" placeholder="e.g.javascript or python">
+                        </div>
+                    </div>
+                    <hr>
+                    <div style="margin:2px; padding:2px;">
+                        <input style="padding: 10px 0px 10px 0px;" type="submit" value="Apply Filters">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br><br>
+        <div th:each="question : ${questions}">
+            <div style="border:1px solid grey;padding-top:3%;padding-bottom:3%;min-width:50%,max-width:50%;">
+                <a style="font-size:100%;text-decoration:none;" th:href="@{/display-question(questionId=${question.id})}" th:text=${question.title}></a>
+                <p style="font-size:80%;"th:text=${question.problem}></p>
+            </div>
+        </div>
+
+        <div th:if="${from == 1}">
+            <div th:if = "${totalPages > 1}">
+                <div>
+                    <div>
+                        Total Rows: [[${totalItems}]]
+                    </div>
+                    <div>
+                        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <a th:if="${currentPage != i}" th:href="@{/dashboard/(filters = ${filters}, sort = ${sortField}, tags = ${tags}, pageNo = ${i})}">[[${i}]]</a>
+                            <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                        </span>
+                    </div>
+                    <div>
+                        <a th:if="${currentPage < totalPages}" th:href="@{/dashboard/(filters = ${filters}, sort = ${sortField}, tags = ${tags}, pageNo = ${i})}">Next</a>
+                        <span th:unless="${currentPage < totalPages}">Next</span>
+                    </div>
+                    <div>
+                        <a th:if="${currentPage < totalPages}" th:href="@{/dashboard/(filters = ${filters}, sort = ${sortField}, tags = ${tags}, pageNo = ${i})}">Last</a>
+                        <span th:unless="${currentPage < totalPages}">Last</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:unless="${from == 1}">
+            <div th:if = "${totalPages > 1}">
+                <div>
+                    <div>
+                        Total Rows: [[${totalItems}]]
+                    </div>
+                    <div>
+                        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <a th:if="${currentPage != i}" th:href="@{/search/(pageNo = ${i}, searchKey = ${searchKey})}">[[${i}]]</a>
+                            <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                        </span>
+                    </div>
+                    <div>
+                        <a th:if="${currentPage < totalPages}" th:href="@{/search/(pageNo = ${currentPage + 1}, searchKey = ${searchKey})}">Next</a>
+                        <span th:unless="${currentPage < totalPages}">Next</span>
+                    </div>
+                    <div>
+                        <a th:if="${currentPage < totalPages}" th:href="@{/search/(pageNo = ${totalPages}, searchKey = ${searchKey})}">Last</a>
+                        <span th:unless="${currentPage < totalPages}">Last</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div style="min-width:25%;display:inline-block"></div>
+</div>
+</body>
+</html>

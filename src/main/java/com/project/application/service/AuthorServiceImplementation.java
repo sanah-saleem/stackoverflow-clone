@@ -1,0 +1,28 @@
+package com.project.application.service;
+
+import com.project.application.domain.Author;
+import com.project.application.repository.AuthorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthorServiceImplementation implements AuthorService{
+    @Autowired
+    AuthorRepository authorRepository;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Override
+    public void saveAuthor(Author author) {
+        if(!authorRepository.findAll().contains(author)) {
+            author.setPassword(this.bCryptPasswordEncoder.encode(author.getPassword()));
+            authorRepository.save(author);
+        }
+    }
+
+    @Override
+    public Author findByEmail(String email) {
+        return authorRepository.findByEmail(email);
+    }
+}
