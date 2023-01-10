@@ -29,8 +29,9 @@ public class TeamsController {
     }
     @GetMapping("/displayTeam")
     public String displayTeam(Principal principal,Model model,@RequestParam("teamId") long teamId){
-        List<TeamQuestion> teamQuestions=
-        model.addAttribute("questions",)
+        List<TeamQuestion> teamQuestions=teamService.getAllTeamQuestions(teamId);
+        model.addAttribute("questions",teamQuestions);
+        return "viewTeam";
     }
 
     @PostMapping("/create-team")
