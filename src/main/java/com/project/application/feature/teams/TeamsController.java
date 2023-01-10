@@ -1,7 +1,9 @@
 package com.project.application.feature.teams;
 
 
+import com.project.application.domain.Answer;
 import com.project.application.domain.TeamQuestion;
+import com.project.application.service.AnswerService;
 import com.project.application.service.AuthorService;
 import com.project.application.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class TeamsController {
 
     @Autowired
     TagService tagService;
+
+    @Autowired
+    AnswerService answerService;
 
     @GetMapping("/viewTeams")
     public String viewTeams(Principal principal, Model model) {
@@ -111,9 +116,10 @@ public class TeamsController {
         return "viewTeam";
     }
 
-    @PostMapping("/viewTeamQuestion/{id}")
-    public String viewTeamQuestion(@PathVariable("id") long teamQuestionId, Model model) {
-        model.addAttribute("teamQuestion", teamService.getTeamQuestionById(teamQuestionId));
+    @GetMapping("/viewTeamQuestion")
+    public String viewTeamQuestion(@RequestParam("questionId") long teamQuestionId, Model model) {
+        model.addAttribute("question", teamService.getTeamQuestionById(teamQuestionId));
+        model.addAttribute("newAnswer", new Answer());
         return "viewTeamQuestion";
     }
 
@@ -126,8 +132,23 @@ public class TeamsController {
 //        return "inputTeamQuestion";
 //    }
 
-    @PostMapping("/delete-team-question/{id}")
-    public String deleteTeamQuestion(@PathVariable("id") long teamQuestionId) {
-        return "";
+//    @PostMapping("/delete-team-question/{id}")
+//    public String deleteTeamQuestion(@PathVariable("id") long teamQuestionId,
+//                                     @RequestParam("teamId") long teamId,
+//                                     Model model, Principal principal) {
+//        teamService.deleteTeam(teamQuestionId);
+//        model.addAttribute("team", teamService.getTeamById(teamId));
+//        model.addAttribute("username", principal.getName());
+//        return "viewTeam";
+//    }
+
+    @PostMapping("/save-team-answer")
+    public String saveTeamAnswer(@RequestParam("questionId") long questionId,
+                                 @ModelAttribute("newAnswer") Answer answer,
+                                 Model model) {
+        teamService.saveTeamAnswer(questionId, answer);
+        model.addAttribute("question", teamService.getTeamQuestionById(questionId));
+        model.addAttribute("newAnswer", new Answer());
+        return "viewTeamQuestion";
     }
 }

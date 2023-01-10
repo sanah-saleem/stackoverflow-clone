@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3 th:text=${question.title}></h3>
+<p th:text=${question.problem}></p>
+<p th:text="${question.expectation}"></p>
+<span th:each="tag : ${question.tags}">
+            <span>[[${tag.name}]]</span>&nbsp
+    </span><br>
+<form th:action="@{/viewTeamQuestion}" method="post">
+  <button type="submit">update</button>
+</form>
+<form th:action="@{/viewTeamQuestion}" method="post">
+  <button type="submit">delete</button>
+</form><br><br>
+<h4>Answers</h4><br>
+<div class="answers" th:each="answer : ${question.answers}">
+    <div th:text="${answer.content}"></div><br>
+    <form th:action="@{/viewTeamQuestion}" method="post">
+        <button type="submit">update</button>
+    </form>
+    <form th:action="@{/viewTeamQuestion}" method="post">
+        <button type="submit">delete</button>
+    </form><br>
+</div>
+<br><br><h5>Anything to say?</h5>
+<form th:action="@{/save-team-answer}" th:object="${newAnswer}" method="post">
+    <input type="hidden" name="questionId" th:value="${question.id}">
+    <textarea th:field="*{content}"></textarea>
+    <button type="submit">submit</button>
+</form>
+</body>
+</html>
