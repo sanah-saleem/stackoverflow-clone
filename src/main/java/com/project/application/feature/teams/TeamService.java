@@ -4,11 +4,11 @@ import com.project.application.domain.Author;
 
 public interface TeamService {
 
-    public void saveTeam(Team team);
+    public Team saveTeam(String teamName,String email);
 
-    public void addMember(Author author);
+    public Team addMember(long teamId,String email);
 
-    public void removeMember(Author author);
+    public Team removeMember(long teamId,String email);
 
-    public void makeAdmin(Author author);
+    public Team makeAdmin(long teamId,String email);
 }

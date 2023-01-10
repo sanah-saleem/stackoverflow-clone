@@ -1,11 +1,16 @@
 package com.project.application.feature.teams;
 
 import com.project.application.domain.Author;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name="team")
 public class Team {
 
@@ -31,4 +36,11 @@ public class Team {
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     List<Author> members;
+
+    public void addMember(Author author){
+        if(members==null){
+            members=new ArrayList<>();
+        }
+        members.add(author);
+    }
 }
