@@ -7,11 +7,12 @@
 </head>
 <body>
 <form th:action="@{/create-team}" method="post">
+    <input type="text" name="teamName">
     <input type="submit" value="create">
 </form>
 <div th:each="team : ${teams}">
     <p th:text=${team.name}></p>
-    <p th:text=${team.admin}></p>
+    <p th:text=${team.admin.name}></p>
     <p th:text=${team.members.size()}></p>
     <br>
     <br>
