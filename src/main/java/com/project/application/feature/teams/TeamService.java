@@ -21,7 +21,7 @@ public interface TeamService {
 
     Team getTeamById(long teamId);
 
-    void saveTeamQuestion(long teamId, TeamQuestion teamQuestion);
+    void saveTeamQuestion(long teamId, TeamQuestion teamQuestion, String tagNames);
 
     TeamQuestion getTeamQuestionById(long teamQuestionId);
 }
