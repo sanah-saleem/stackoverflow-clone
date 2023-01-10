@@ -58,12 +58,12 @@ public class Author {
             name = "author_team",
             joinColumns = @JoinColumn(name = "author_id"),
             inverseJoinColumns = @JoinColumn(name = "team_id"))
-    List<Team> teams;
+    private List<Team> teams;
 
-    @OneToMany(mappedBy = "admin", cascade = {
-            CascadeType.MERGE, CascadeType.PERSIST,
-            CascadeType.REFRESH, CascadeType.DETACH})
-    List<Team> adminTeams;
+//    @OneToMany(mappedBy = "admin", cascade = {
+//            CascadeType.MERGE, CascadeType.PERSIST,
+//            CascadeType.REFRESH, CascadeType.DETACH})
+//    List<Team> adminTeams;
 
     public void addTagWatched(Tag tag) {
         if(tagsWatched == null) {
@@ -98,5 +98,18 @@ public class Author {
         }
         comments.add(comment);
         comment.setAuthor(this);
+    }
+
+    public void addTeam(Team team) {
+        if(teams == null) {
+            teams = new ArrayList();
+        }
+        teams.add(team);
+    }
+
+    public void removeTeam(Team team) {
+        if(! (teams == null)) {
+            teams.remove(team);
+        }
     }
 }

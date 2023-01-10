@@ -19,7 +19,7 @@ public class TeamsController {
     public String saveTeams (@RequestParam("teamName") String teamName, Principal principal, Model model) {
         Team team = teamService.saveTeam(teamName, principal.getName());
         model.addAttribute("team", team);
-        return "#";
+        return "viewTeams";
     }
 
     @PostMapping("/add-member")
@@ -27,7 +27,7 @@ public class TeamsController {
                             @RequestParam("memberEmail") String memberEmail, Model model) {
         Team team = teamService.addMember(teamId, memberEmail);
         model.addAttribute("team", team);
-        return "#";
+        return "viewTeams";
     }
 
     @PostMapping("/remove-member")
@@ -35,7 +35,15 @@ public class TeamsController {
                                @RequestParam("memberEmail") String memberEmail, Model model) {
         Team team = teamService.removeMember(teamId, memberEmail);
         model.addAttribute("team", team);
-        return "#";
+        return "viewTeams";
+    }
+
+    @PostMapping("/leave-member")
+    public String leaveMember(@RequestParam("teamId") long teamId,
+                               @RequestParam("memberEmail") String memberEmail, Model model) {
+        Team team = teamService.removeMember(teamId, memberEmail);
+        model.addAttribute("team", team);
+        return "viewTeams";
     }
 
     @PostMapping("/make-admin")
@@ -43,6 +51,6 @@ public class TeamsController {
                             @RequestParam("memberEmail") String memberEmail, Model model) {
         Team team = teamService.makeAdmin(teamId, memberEmail);
         model.addAttribute("team", team);
-        return "#";
+        return "viewTeams";
     }
 }

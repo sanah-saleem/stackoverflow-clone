@@ -35,12 +35,18 @@ public class Team {
             name = "author_team",
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
-    List<Author> members;
+    private List<Author> members;
 
     public void addMember(Author author){
         if(members==null){
             members=new ArrayList<>();
         }
         members.add(author);
+    }
+
+    public void removeMember(Author author){
+        if(! (members==null)) {
+            members.remove(author);
+        }
     }
 }
