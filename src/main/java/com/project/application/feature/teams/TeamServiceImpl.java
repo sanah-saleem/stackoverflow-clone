@@ -1,5 +1,6 @@
 package com.project.application.feature.teams;
 
+import com.project.application.domain.Answer;
 import com.project.application.domain.Author;
 import com.project.application.domain.Tag;
 import com.project.application.domain.TeamQuestion;
@@ -55,7 +56,7 @@ public class TeamServiceImpl implements TeamService{
             return team;
         }
         team.addMember(author);
-        author.addTeam(team);
+//        author.addTeam(team);
         teamRepository.save(team);
         return team;
     }
@@ -98,6 +99,13 @@ public class TeamServiceImpl implements TeamService{
         teamQuestion.setTags(tags);
         getTeamById(teamId).addQuestion(teamQuestion);
         teamQuestionRepository.save(teamQuestion);
+    }
+
+    @Override
+    public void saveTeamAnswer(long questionId, Answer answer) {
+        TeamQuestion question = teamQuestionRepository.findById(questionId).get();
+        question.addAnswer(answer);
+        teamQuestionRepository.save(question);
     }
 
     @Override

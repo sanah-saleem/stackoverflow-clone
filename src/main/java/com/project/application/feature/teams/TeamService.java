@@ -1,5 +1,6 @@
 package com.project.application.feature.teams;
 
+import com.project.application.domain.Answer;
 import com.project.application.domain.Author;
 import com.project.application.domain.TeamQuestion;
 
@@ -16,6 +17,8 @@ public interface TeamService {
     public Team removeMember(long teamId,String email);
 
     public Team makeAdmin(long teamId,String email);
+
+    void saveTeamAnswer(long questionId, Answer answer);
 
     List<TeamQuestion> getAllTeamQuestions(long teamId);
 
