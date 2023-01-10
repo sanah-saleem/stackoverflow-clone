@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:each="question : ${questions}">
+  <div style="border:1px solid grey;padding-top:3%;padding-bottom:3%;min-width:50%,max-width:50%;">
+    <a style="font-size:100%;text-decoration:none;" th:href="@{/display-question(questionId=${question.id})}" th:text=${question.title}></a>
+    <p style="font-size:80%;"th:text=${question.problem}></p>
+  </div>
+</div>
+</body>
+</html>
