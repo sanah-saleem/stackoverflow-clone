@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/create-team}" method="post">
+    <input type="submit" value="create">
+</form>
+<div th:each="team : ${teams}">
+    <p th:text=${team.name}></p>
+    <p th:text=${team.admin}></p>
+    <p th:text=${team.members.size()}></p>
+    <br>
+    <br>
+</div>
+</body>
+</html>
