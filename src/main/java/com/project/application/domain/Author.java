@@ -87,6 +87,14 @@ public class Author {
         question.setAuthor(this);
     }
 
+    public void addTeamQuestion (TeamQuestion question){
+        if(teamQuestions == null){
+            teamQuestions = new ArrayList<>();
+        }
+        teamQuestions.add(question);
+        question.setAuthor(this);
+    }
+
     public void addAnswer (Answer answer){
         if(answers == null){
             answers = new ArrayList<>();
