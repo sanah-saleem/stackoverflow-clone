@@ -11,9 +11,11 @@
     <input type="submit" value="create">
 </form>
 <div th:each="team : ${teams}">
-    <p th:text=${team.name}></p>
+    <div style="border:1px solid grey;padding-top:3%;padding-bottom:3%;min-width:50%,max-width:50%;">
+    <a th:href="@{/displayTeam(teamId=${team.id})}" th:text="team.name"></a>
     <p th:text=${team.admin.name}></p>
     <p th:text=${team.members.size()}></p>
+        </div>
     <br>
     <br>
 </div>
