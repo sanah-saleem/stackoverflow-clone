@@ -1,6 +1,7 @@
 package com.project.application.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.project.application.feature.teams.Team;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,6 +50,20 @@ public class Author {
 
     @OneToMany( mappedBy = "author", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    @ManyToMany(cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinTable(
+            name = "author_team",
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id"))
+    List<Team> teams;
+
+    @OneToMany(mappedBy = "admin", cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH, CascadeType.DETACH})
+    List<Team> adminTeams;
 
     public void addTagWatched(Tag tag) {
         if(tagsWatched == null) {
