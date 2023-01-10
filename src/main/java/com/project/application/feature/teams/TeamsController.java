@@ -1,6 +1,8 @@
 package com.project.application.feature.teams;
 
 
+import com.project.application.repository.AuthorRepository;
+import com.project.application.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,12 +16,20 @@ public class TeamsController {
 
     @Autowired
     TeamService teamService;
+    @Autowired
+    private AuthorService authorService;
+
+    @PostMapping("/viewTeams")
+    public String viewTeams(Principal principal, Model model) {
+        model.addAttribute("teams", authorService.findByEmail(principal.getName()).getTeams());
+        return "listTeams";
+    }
 
     @PostMapping("/create-team")
     public String saveTeams (@RequestParam("teamName") String teamName, Principal principal, Model model) {
         Team team = teamService.saveTeam(teamName, principal.getName());
         model.addAttribute("team", team);
-        return "viewTeams";
+        return "viewTeam";
     }
 
     @PostMapping("/add-member")
@@ -27,7 +37,7 @@ public class TeamsController {
                             @RequestParam("memberEmail") String memberEmail, Model model) {
         Team team = teamService.addMember(teamId, memberEmail);
         model.addAttribute("team", team);
-        return "viewTeams";
+        return "viewTeam";
     }
 
     @PostMapping("/remove-member")
@@ -35,7 +45,7 @@ public class TeamsController {
                                @RequestParam("memberEmail") String memberEmail, Model model) {
         Team team = teamService.removeMember(teamId, memberEmail);
         model.addAttribute("team", team);
-        return "viewTeams";
+        return "viewTeam";
     }
 
     @PostMapping("/leave-member")
@@ -43,7 +53,7 @@ public class TeamsController {
                                @RequestParam("memberEmail") String memberEmail, Model model) {
         Team team = teamService.removeMember(teamId, memberEmail);
         model.addAttribute("team", team);
-        return "viewTeams";
+        return "viewTeam";
     }
 
     @PostMapping("/make-admin")
@@ -51,6 +61,6 @@ public class TeamsController {
                             @RequestParam("memberEmail") String memberEmail, Model model) {
         Team team = teamService.makeAdmin(teamId, memberEmail);
         model.addAttribute("team", team);
-        return "viewTeams";
+        return "viewTeam";
     }
 }
