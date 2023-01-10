@@ -8,10 +8,10 @@
 WatchTag
 
     <div th:if="${state}" name="state">
-        <button type="submit" th:formaction="@{/addWatchList}" name="watchTag" th:value="${tag.name}">UnWatch</button>
+        <button type="submit" th:formaction="@{/addWatchList}" name="watchTag" th:value="${tag.name}">Watch</button>
     </div>
     <div th:unless="${state}" name="state">
-        <button type="submit" th:formaction="@{/addWatchList}" name="watchTag" th:value="${tag.name}">watch</button>
+        <button type="submit" th:formaction="@{/addWatchList}" name="watchTag" th:value="${tag.name}">Unwatch</button>
     </div>
 
 <!--Displayquestions-->

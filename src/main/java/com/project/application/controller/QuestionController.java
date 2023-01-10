@@ -287,22 +287,20 @@ public class QuestionController {
     }
 //
     @PostMapping("/addWatchList")
-    public String addWatchList(@RequestParam("watchTag") String watchTag,Principal principal, Model theModel)
+    public String addWatchList(@RequestParam("watchTag") String tagName,Principal principal, Model theModel)
     {
-
-        Tag watchtag= new Tag();
-        watchtag.setName(watchTag);
-        boolean state=authorService.addTagWatched(authId,watchtag);
+        Tag watchTag = tagService.findTagByName(tagName);
+        Author author= authorService.findByEmail(principal.getName());
+        List<Tag> tagswatched=authorService.addTagWatched(principal.getName(),watchTag);
+        Set<Question> questions= watchTag.getQuestions();
+        Boolean state = author.getTagsWatched().contains(watchTag);
         theModel.addAttribute("state",state);
-        return "tags";
+        theModel.addAttribute("author",author);
+        theModel.addAttribute("tag",watchTag);
+        theModel.addAttribute("Questions",questions);
+        return "specTag";
     }
 
-        theModel.addAttribute("newAnswer", new Answer());
-        theModel.addAttribute("newComment", new Comment());
-        theModel.addAttribute("username", SecurityContextHolder.getContext().getAuthentication().getName());
-        theModel.addAttribute("author", authorService.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
-        return "display-question";
-    }
     @GetMapping("/question-tagged")
     public String questionTagged(@RequestParam("tagname") String tagname,Model theModel){
         System.out.println("In controller"+tagname);
