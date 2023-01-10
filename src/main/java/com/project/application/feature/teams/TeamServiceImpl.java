@@ -3,7 +3,9 @@ package com.project.application.feature.teams;
 import com.project.application.domain.Author;
 import com.project.application.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TeamServiceImpl implements TeamService{
     @Autowired
     TeamRepository teamRepository;
@@ -18,6 +20,7 @@ public class TeamServiceImpl implements TeamService{
         team.setName(teamName);
         team.setAdmin(author);
         team.addMember(author);
+        author.addTeam(team);
         teamRepository.save(team);
         return team;
     }
@@ -33,6 +36,7 @@ public class TeamServiceImpl implements TeamService{
             return team;
         }
         team.addMember(author);
+        author.addTeam(team);
         teamRepository.save(team);
         return team;
     }
@@ -47,8 +51,10 @@ public class TeamServiceImpl implements TeamService{
         if(!team.members.contains(author)){
             return team;
         }
-        team.members.remove(author);
+        team.removeMember(author);
+        author.removeTeam(team);
         teamRepository.save(team);
+//        authorService.saveAuthor(author);
         return team;
     }
 
