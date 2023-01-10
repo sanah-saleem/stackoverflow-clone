@@ -1,11 +1,17 @@
 package com.project.application.feature.teams;
 
 import com.project.application.domain.Author;
+import com.project.application.domain.TeamQuestion;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name="team")
 public class Team {
 
@@ -30,5 +36,35 @@ public class Team {
             name = "author_team",
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
-    List<Author> members;
+    private List<Author> members;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="team_id")
+    private List<TeamQuestion> teamQuestions;
+
+    public void addQuestion(TeamQuestion question) {
+        if(teamQuestions == null) {
+            teamQuestions = new ArrayList();
+        }
+        teamQuestions.add(question);
+    }
+
+    public void removeQuestion(TeamQuestion question) {
+        if(teamQuestions != null) {
+            teamQuestions.remove(question);
+        }
+    }
+
+    public void addMember(Author author){
+        if(members==null){
+            members=new ArrayList<>();
+        }
+        members.add(author);
+    }
+
+    public void removeMember(Author author){
+        if(! (members==null)) {
+            members.remove(author);
+        }
+    }
 }
